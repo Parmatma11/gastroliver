@@ -1,17 +1,26 @@
 .header {
   position: fixed;
   top: 0;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
   z-index: 999;
   background-color: var(--bg-main);
   border-bottom: 1px solid var(--border);
-  transition: all var(--transition-normal);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   font-family: var(--font-sans), sans-serif;
 }
 
 .scrolled {
-  box-shadow: var(--shadow-md);
+  top: 12px;
+  width: 92%;
+  max-width: 1100px;
+  border-radius: 99px;
+  border: 1px solid rgba(0, 242, 254, 0.18);
+  box-shadow: var(--shadow-premium);
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 /* Top Strip Banner */
@@ -24,6 +33,12 @@
   transition: max-height var(--transition-normal), padding var(--transition-normal), opacity var(--transition-normal);
   overflow: hidden;
   max-height: 40px;
+}
+
+@media (max-width: 768px) {
+  .topStrip {
+    display: none !important;
+  }
 }
 
 .scrolled .topStrip {
@@ -78,12 +93,22 @@
 /* Main Navbar */
 .mainNavRow {
   padding: 0.75rem 0;
-  transition: padding var(--transition-normal);
+  transition: padding var(--transition-normal), background-color var(--transition-normal);
   background-color: var(--bg-main);
 }
 
 .scrolled .mainNavRow {
   padding: 0.5rem 0;
+  background-color: transparent;
+}
+
+.scrolled .navContainer {
+  padding-left: var(--space-lg) !important;
+  padding-right: var(--space-lg) !important;
+}
+
+.scrolled .navList {
+  gap: var(--space-sm) !important;
 }
 
 .navContainer {
@@ -100,9 +125,8 @@
 }
 
 .logoWrapper {
-  background-color: var(--primary);
-  padding: 4px;
-  border-radius: var(--radius-sm);
+  background-color: transparent;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -116,6 +140,7 @@
   display: flex;
   flex-direction: column;
   line-height: 1.1;
+  white-space: nowrap;
 }
 
 .brandTitle {
@@ -131,6 +156,7 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--text-muted);
+  white-space: nowrap;
 }
 
 /* Desktop Navbar */
@@ -163,6 +189,7 @@
   padding: 0.5rem 0;
   position: relative;
   transition: color var(--transition-fast);
+  white-space: nowrap;
 }
 
 .dropdownTrigger {
@@ -195,7 +222,8 @@
   height: 2px;
   background-color: var(--secondary);
   transform: scaleX(0);
-  transition: transform var(--transition-fast);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .link:hover::after {
@@ -257,12 +285,12 @@
 }
 
 .ctaBtn {
-  display: none;
+  display: none !important;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 992px) {
   .ctaBtn {
-    display: inline-flex;
+    display: inline-flex !important;
   }
 }
 
@@ -320,7 +348,10 @@
   z-index: 998;
   display: flex;
   flex-direction: column;
-  transition: right var(--transition-normal);
+  transition: right 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  background-color: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .drawerOpen {
@@ -412,4 +443,26 @@
 
 .mobileCtaBtn {
   width: 100%;
+}
+
+@media (min-width: 992px) and (max-width: 1300px) {
+  .navList {
+    gap: var(--space-xs) !important;
+  }
+  .link, .dropdownTrigger {
+    font-size: 0.8rem !important;
+  }
+  .brandSubtitle {
+    display: none !important;
+  }
+  .ctaBtn {
+    padding: 0.4rem 0.6rem !important;
+    font-size: 0.8rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .brandSubtitle {
+    display: none !important;
+  }
 }

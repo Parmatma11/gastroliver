@@ -15,6 +15,18 @@ export const mainNavigation: NavigationItem[] = [
       {
         label: "Hospital Details",
         path: "/hospital/"
+      },
+      {
+        label: "Gallery",
+        path: "/gallery/"
+      },
+      {
+        label: "Blog",
+        path: "/blog/"
+      },
+      {
+        label: "Testimonials",
+        path: "/patient-testimonials/"
       }
     ]
   },
@@ -91,18 +103,6 @@ export const mainNavigation: NavigationItem[] = [
         path: "/peroral-endoscopic-myotomy-poem/"
       }
     ]
-  },
-  {
-    label: "Gallery",
-    path: "/gallery/"
-  },
-  {
-    label: "Blog",
-    path: "/blog/"
-  },
-  {
-    label: "Testimonials",
-    path: "/patient-testimonials/"
   },
   {
     label: "Contact Us",

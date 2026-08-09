@@ -204,7 +204,6 @@
   color: var(--text-muted);
 }
 
-/* Professional Timeline */
 .careerTimeline {
   display: flex;
   flex-direction: column;
@@ -233,6 +232,7 @@
   border-radius: 50%;
   background-color: var(--accent);
   border: 2px solid var(--bg-main);
+  box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.2);
 }
 
 .timelinePeriod {

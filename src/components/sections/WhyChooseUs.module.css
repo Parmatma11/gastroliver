@@ -17,20 +17,23 @@
 }
 
 .pointCard {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(0, 242, 254, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-radius: var(--radius-sm);
   padding: var(--space-md) var(--space-lg);
-  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
   height: 100%;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  transition: all var(--transition-normal);
 }
 
 .pointCard:hover {
+  background: rgba(255, 255, 255, 0.05);
   border-color: var(--secondary);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 15px 40px -10px rgba(0, 242, 254, 0.18);
+  transform: translateY(-5px);
 }
 
 .numberWrapper {
@@ -38,26 +41,52 @@
 }
 
 .number {
-  font-family: var(--font-serif), Georgia, serif;
-  font-size: 1.8rem;
+  font-family: var(--font-sans), monospace;
+  font-size: 0.95rem;
   font-weight: 700;
-  color: var(--accent);
-  opacity: 0.8;
+  color: var(--secondary);
+  text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+  letter-spacing: 0.1em;
 }
 
 .title {
   font-family: var(--font-serif), Georgia, serif;
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: var(--primary);
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--bg-main);
   margin-bottom: var(--space-xs);
   line-height: 1.3;
 }
 
 .desc {
   font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 0.875rem;
-  color: var(--text-muted);
-  line-height: 1.5;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
   margin-bottom: 0;
+}
+
+.sectionWrapper {
+  background-color: var(--primary);
+  color: var(--bg-main);
+  position: relative;
+  overflow: hidden;
+}
+
+.containerContent {
+  position: relative;
+  z-index: 2;
+}
+
+.header h2 {
+  color: var(--bg-main) !important;
+}
+
+.header h2::after {
+  background-color: var(--secondary) !important;
+  box-shadow: 0 0 10px var(--secondary);
+}
+
+.header p {
+  color: rgba(255, 255, 255, 0.7) !important;
 }

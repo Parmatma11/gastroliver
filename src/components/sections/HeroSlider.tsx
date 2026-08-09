@@ -27,14 +27,17 @@ export default function HeroSlider() {
         <div
           key={index}
           className={`${styles.slide} ${activeSlide === index ? styles.slideActive : ''}`}
-          style={{ backgroundImage: `url(${slide.backgroundImage})` }}
         >
+          <div 
+            className={styles.slideBg}
+            style={{ backgroundImage: `url(${slide.backgroundImage})` }}
+          />
           <div className={styles.slideOverlay}></div>
           <div className={`container ${styles.slideContent}`}>
-            <span className={styles.slideSubtitle}>{slide.subtitle}</span>
-            <h2 className={styles.slideTitle}>{slide.title}</h2>
-            <p className={styles.slideDesc}>{slide.description}</p>
-            <div className={styles.slideActions}>
+            <span className={`${styles.slideSubtitle} ${activeSlide === index ? 'fade-up-stagger delay-1' : ''}`}>{slide.subtitle}</span>
+            <h2 className={`${styles.slideTitle} ${activeSlide === index ? 'fade-up-stagger delay-2' : ''}`}>{slide.title}</h2>
+            <p className={`${styles.slideDesc} ${activeSlide === index ? 'fade-up-stagger delay-3' : ''}`}>{slide.description}</p>
+            <div className={`${styles.slideActions} ${activeSlide === index ? 'fade-up-stagger delay-4' : ''}`}>
               <Button variant="secondary" size="lg" onClick={handleOpenAppointment}>
                 {slide.ctaText}
               </Button>

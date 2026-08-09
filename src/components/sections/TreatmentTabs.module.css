@@ -44,20 +44,22 @@
 }
 
 .tabBtnActive {
-  background-color: var(--secondary);
+  background-color: rgba(0, 242, 254, 0.05);
   border-color: var(--secondary);
-  color: var(--bg-main);
-  box-shadow: var(--shadow-md);
+  color: var(--primary);
+  box-shadow: 0 4px 15px -2px rgba(0, 242, 254, 0.15);
 }
 
 .tabIcon {
   width: 24px;
   height: 24px;
   object-fit: contain;
+  transition: transform var(--transition-fast);
 }
 
 .tabBtnActive .tabIcon {
-  filter: brightness(0) invert(1);
+  filter: drop-shadow(0 0 4px rgba(0, 242, 254, 0.5));
+  transform: translateY(-1px);
 }
 
 .tabBtn span {
@@ -68,9 +70,11 @@
 .tabPanel {
   background-color: var(--bg-card);
   border: 1px solid var(--border);
+  border-left: 3px solid var(--secondary);
   border-radius: var(--radius-sm);
   padding: var(--space-md);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-premium);
+  transition: all var(--transition-normal);
 }
 
 @media (min-width: 768px) {
@@ -104,10 +108,16 @@
   border-radius: var(--radius-sm);
   overflow: hidden;
   border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
 }
 
 .panelImage {
   object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.panelGrid:hover .panelImage {
+  transform: scale(1.04);
 }
 
 .panelInfoColumn {

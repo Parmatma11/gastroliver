@@ -21,18 +21,22 @@ export default function WhyChooseUs() {
   ];
 
   return (
-    <section className="section-padding bg-soft-slab">
-      <div className="container">
-        <div className="section-header">
-          <h2>Why Choose Gastroliver Clinic?</h2>
-          <p>We provide compassionate, evidence-based care backed by advanced clinical credentials and diagnostic technology</p>
+    <section className={`section-padding ${styles.sectionWrapper}`}>
+      {/* Ambient Spotlights */}
+      <div className="glow-spot-cyan" style={{ top: '-10%', left: '-10%' }} />
+      <div className="glow-spot-teal" style={{ bottom: '-15%', right: '-10%' }} />
+      
+      <div className={`container ${styles.containerContent}`}>
+        <div className={`section-header ${styles.header}`}>
+          <h2 className={styles.sectionTitle}>Why Choose Gastroliver Clinic?</h2>
+          <p className={styles.sectionSubtitle}>We provide compassionate, evidence-based care backed by advanced clinical credentials and diagnostic technology</p>
         </div>
 
         <div className={styles.grid}>
           {points.map((point, index) => (
             <div key={index} className={styles.pointCard}>
               <div className={styles.numberWrapper}>
-                <span className={styles.number}>0{index + 1}</span>
+                <span className={styles.number}>{"//"} 0{index + 1}</span>
               </div>
               <h3 className={styles.title}>{point.title}</h3>
               <p className={styles.desc}>{point.desc}</p>
