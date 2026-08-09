@@ -1,0 +1,125 @@
+.container {
+  background-color: var(--bg-main);
+  padding-bottom: var(--space-xl);
+}
+
+.wrapper {
+  margin-top: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+/* Card section wrapper */
+.sectionCard {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.sectionCard h2 {
+  font-family: var(--font-serif), Georgia, serif;
+  color: var(--primary);
+  font-size: 1.5rem;
+  margin-bottom: var(--space-md);
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 6px;
+  display: inline-block;
+}
+
+/* Links grid for static pages / blog posts */
+.linksGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-sm);
+}
+
+@media (min-width: 576px) {
+  .linksGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 992px) {
+  .linksGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.dirLink {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-main);
+  text-decoration: none;
+  background-color: var(--bg-soft);
+  border: 1px solid var(--border);
+  padding: 10px var(--space-md);
+  border-radius: var(--radius-xs);
+  transition: all var(--transition-fast);
+  display: block;
+}
+
+.dirLink:hover {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: var(--bg-main);
+  padding-left: calc(var(--space-md) + 4px);
+}
+
+/* Multi-column layout grids for conditions/procedures */
+.subGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+}
+
+@media (min-width: 768px) {
+  .subGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .subGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.subCol h3 {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.15rem;
+  color: var(--primary);
+  margin-bottom: var(--space-xs);
+}
+
+.linksList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.linksList li {
+  border-bottom: 1px dashed var(--border);
+  padding-bottom: 4px;
+}
+
+.linksList li:last-child {
+  border-bottom: none;
+}
+
+.linksList a {
+  font-size: 0.85rem;
+  color: var(--text-main);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  display: block;
+}
+
+.linksList a:hover {
+  color: var(--secondary);
+  padding-left: 4px;
+}

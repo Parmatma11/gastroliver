@@ -1,0 +1,243 @@
+.container {
+  background-color: var(--bg-main);
+  padding-bottom: var(--space-xl);
+}
+
+.wrapper {
+  margin-top: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* Category filter buttons */
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  justify-content: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: var(--space-md);
+}
+
+.filterBtn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.filterBtn:hover {
+  border-color: var(--secondary);
+  color: var(--secondary);
+}
+
+.filterBtn.active {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: var(--bg-main);
+}
+
+/* Image grid */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+@media (min-width: 576px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 992px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 75%; /* 4:3 Aspect Ratio */
+}
+
+.image {
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.card:hover .image {
+  transform: scale(1.05);
+}
+
+/* Hover Zoom overlays */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(11, 30, 54, 0.85); /* primary overlay color */
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  transition: opacity var(--transition-fast);
+  padding: var(--space-md);
+  text-align: center;
+}
+
+.card:hover .overlay {
+  opacity: 1;
+}
+
+.catLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.zoomText {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.2rem;
+  color: var(--bg-main);
+  font-weight: 500;
+}
+
+/* Lightbox Modal */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(11, 30, 54, 0.95); /* Deep dark overlay */
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lightboxContent {
+  position: relative;
+  max-width: 90%;
+  max-height: 85%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.lightboxImageWrapper {
+  position: relative;
+  width: 100%;
+  height: calc(100% - 100px);
+}
+
+.lightboxImage {
+  object-fit: contain;
+}
+
+.closeBtn {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: var(--bg-main);
+  font-size: 2.5rem;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.closeBtn:hover {
+  color: var(--accent);
+}
+
+/* Navigation buttons */
+.navBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--bg-main);
+  font-size: 1.5rem;
+  padding: 12px 18px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  z-index: 10;
+}
+
+.navBtn:hover {
+  background-color: var(--secondary);
+  border-color: var(--secondary);
+}
+
+.prevBtn {
+  left: 10px;
+}
+
+.nextBtn {
+  right: 10px;
+}
+
+@media (max-width: 768px) {
+  .navBtn {
+    padding: 8px 12px;
+    font-size: 1.2rem;
+  }
+}
+
+.lightboxCaption {
+  margin-top: var(--space-md);
+  text-align: center;
+  color: var(--bg-main);
+  line-height: 1.4;
+}
+
+.lightboxCaption span {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.lightboxCaption p {
+  font-size: 0.95rem;
+  margin-top: 2px;
+}
+

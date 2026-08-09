@@ -1,0 +1,86 @@
+.container {
+  background-color: var(--bg-main);
+  padding-bottom: var(--space-xl);
+}
+
+.wrapper {
+  margin-top: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+/* Review statistics callout block */
+.statsCard {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .statsCard {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.statItem:not(:last-child) {
+  border-bottom: 1px dashed var(--border);
+  padding-bottom: var(--space-sm);
+}
+
+@media (min-width: 768px) {
+  .statItem:not(:last-child) {
+    border-bottom: none;
+    border-right: 1px dashed var(--border);
+    padding-bottom: 0;
+  }
+}
+
+.number {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1.1;
+}
+
+.stars {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent); /* gold star color */
+  margin: 4px 0;
+}
+
+.label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* Testimonials grid layout */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

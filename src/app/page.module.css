@@ -1,0 +1,242 @@
+/* --- HOMEPAGE STYLES --- */
+
+.homepage {
+  font-family: var(--font-sans), sans-serif;
+  color: var(--text-main);
+  overflow-x: hidden;
+}
+
+/* 2. Quick Action Grid cards styling */
+.actionsSection {
+  margin-top: -40px;
+  position: relative;
+  z-index: 10;
+}
+
+.actionsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .actionsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.actionCard {
+  position: relative;
+  background-color: var(--primary);
+  color: var(--bg-main);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md) var(--space-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  aspect-ratio: 16/10;
+  display: flex;
+  align-items: flex-end;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cardBgWrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.cardBg {
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.actionCard:hover .cardBg {
+  transform: scale(1.03);
+}
+
+.cardOverlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(11, 30, 54, 0.7);
+  transition: background-color var(--transition-normal);
+}
+
+.actionCard:hover .cardOverlay {
+  background-color: rgba(11, 30, 54, 0.6);
+}
+
+.cardContent {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.cardTitle {
+  font-family: var(--font-serif), serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--bg-main);
+  margin-bottom: 2px;
+}
+
+.cardDesc {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: var(--space-sm);
+  white-space: pre-line;
+}
+
+.cardLink, .ctaCardLink {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  transition: color var(--transition-fast);
+  display: inline-block;
+}
+
+.ctaCardLink {
+  background-color: var(--accent);
+  color: var(--primary);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  text-decoration: none;
+}
+
+.ctaCardLink:hover {
+  background-color: #d6b36a;
+  color: var(--primary);
+}
+
+.cardLink:hover {
+  color: var(--bg-main);
+}
+
+/* 5. Process Journey steps styling */
+.processGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+@media (min-width: 640px) {
+  .processGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .processGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.processCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--space-sm);
+}
+
+.processImageWrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--border);
+  margin-bottom: var(--space-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+.processImage {
+  object-fit: cover;
+}
+
+.stepBadge {
+  position: absolute;
+  bottom: 0;
+  right: 50%;
+  transform: translateX(50%) translateY(30%);
+  background-color: var(--accent);
+  color: var(--primary);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.processTitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+  color: var(--primary);
+  font-family: var(--font-sans), sans-serif;
+}
+
+.processDesc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* 6. Stats section styling */
+.statsSection {
+  background-color: var(--primary);
+  color: var(--bg-main);
+  padding: var(--space-lg) 0;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-md);
+  text-align: center;
+}
+
+@media (min-width: 992px) {
+  .statsGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.statCard {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-sm) 0;
+}
+
+.statValue {
+  font-family: var(--font-serif), serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.statLabel {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* 7. General grid row footer action wrapper */
+.viewMoreRow {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-xl);
+}
+.viewMoreRow a {
+  color: inherit;
+  display: block;
+}

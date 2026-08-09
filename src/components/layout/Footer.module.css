@@ -1,0 +1,246 @@
+.footer {
+  background-color: var(--primary);
+  color: rgba(255, 255, 255, 0.8);
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-xl);
+  font-family: var(--font-sans), sans-serif;
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-xl);
+  grid-template-columns: 1fr;
+  padding-bottom: var(--space-xl);
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+  }
+}
+
+/* Widgets Styling */
+.brandWidget {
+  display: flex;
+  flex-direction: column;
+}
+
+.brandTitle {
+  font-family: var(--font-serif), serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--bg-main);
+  line-height: 1.1;
+}
+
+.brandSubtitle {
+  font-size: 0.75rem;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-sm);
+  display: block;
+}
+
+.description {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: var(--space-md);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.hospitalAffiliations {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: var(--space-sm);
+}
+
+.affiliationLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--bg-main);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.affiliationText {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.4;
+}
+
+/* Custom Widget Layouts */
+.widgetTitle {
+  font-family: var(--font-serif), serif;
+  font-size: 1.25rem;
+  color: var(--bg-main);
+  margin-bottom: var(--space-md);
+  position: relative;
+  padding-bottom: 6px;
+}
+
+.widgetTitle::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 1.5px;
+  background-color: var(--accent);
+}
+
+.linksList, .contactList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.link {
+  font-size: 0.9rem;
+  transition: all var(--transition-fast);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.link:hover {
+  color: var(--accent);
+  padding-left: 4px;
+}
+
+/* Contact Details Widget */
+.contactItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-xs);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  color: var(--accent);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.contactText a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+/* Subscribe Newsletter styling */
+.widgetDesc {
+  font-size: 0.85rem;
+  margin-bottom: var(--space-sm);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.subscribeForm {
+  display: flex;
+  margin-bottom: var(--space-md);
+}
+
+.subscribeInput {
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--bg-main);
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  font-size: 0.875rem;
+  font-family: inherit;
+  width: 100%;
+}
+
+.subscribeInput:focus {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.12);
+  border-color: var(--accent);
+}
+
+.subscribeBtn {
+  background-color: var(--accent);
+  color: var(--primary);
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.subscribeBtn:hover {
+  background-color: #d6b36a;
+}
+
+/* Social Media Follow icons */
+.socialsRow {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.socialIconLink {
+  width: 36px;
+  height: 36px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.socialIconLink:hover {
+  background-color: var(--accent);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.socialIcon {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+/* Sub-Footer strip */
+.subFooter {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: #061120;
+  padding: var(--space-sm) 0;
+  font-size: 0.8rem;
+}
+
+.subFooterContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .subFooterContent {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+}
+
+.copyright {
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0;
+}
+
+.footerInfo {
+  color: rgba(255, 255, 255, 0.4);
+}

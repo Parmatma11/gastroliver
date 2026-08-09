@@ -1,0 +1,53 @@
+.hero {
+  position: relative;
+  background-color: var(--bg-soft);
+  border-bottom: 1px solid var(--border);
+  padding-top: calc(var(--space-xl) + 80px); /* Account for fixed header height */
+  padding-bottom: var(--space-xl);
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+}
+
+.withImage {
+  color: var(--bg-main);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(11, 30, 54, 0.02); /* very light overlay by default */
+  z-index: 1;
+}
+
+.withImage .overlay {
+  background-color: rgba(11, 30, 54, 0.7); /* dark overlay if image is set */
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+}
+
+.title {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: var(--space-xs);
+  line-height: 1.2;
+}
+
+.withImage .title {
+  color: var(--bg-main);
+}
+
+.subtitle {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  max-width: 600px;
+}
+
+.withImage .subtitle {
+  color: rgba(255, 255, 255, 0.8);
+}

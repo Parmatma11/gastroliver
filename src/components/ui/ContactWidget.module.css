@@ -1,0 +1,135 @@
+.grid {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.card:hover {
+  border-color: var(--secondary);
+  box-shadow: var(--shadow-md);
+}
+
+.iconWrapper {
+  width: 48px;
+  height: 48px;
+  background-color: var(--bg-soft);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.title {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: var(--space-xs);
+}
+
+.value, .valueSec {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-main);
+  line-height: 1.3;
+}
+
+.value a:hover, .valueSec a:hover {
+  color: var(--secondary);
+  text-decoration: underline;
+}
+
+.valueSec {
+  margin-top: 2px;
+}
+
+.valueAddress {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.9rem;
+  color: var(--text-main);
+  line-height: 1.4;
+  margin-bottom: var(--space-xs);
+}
+
+.label {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.mapLink {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: auto;
+  transition: color var(--transition-fast);
+}
+
+.mapLink:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+/* Hours display */
+.hoursContainer {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.hoursRow {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dashed var(--border);
+  padding: 4px 0;
+  font-size: 0.85rem;
+}
+
+.hoursRow:last-child {
+  border-bottom: none;
+}
+
+.days {
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.hours {
+  color: var(--text-muted);
+}

@@ -1,0 +1,247 @@
+.container {
+  background-color: var(--bg-main);
+  padding-bottom: var(--space-xl);
+}
+
+.contentWrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+  margin-top: var(--space-xl);
+}
+
+@media (min-width: 992px) {
+  .contentWrapper {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.mainColumn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* Featured image block */
+.imageContainer {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+
+@media (min-width: 768px) {
+  .imageContainer {
+    height: 400px;
+  }
+}
+
+.featuredImage {
+  object-fit: cover;
+}
+
+/* Article Body typography */
+.articleBody {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  color: var(--text-main);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.articleBody h2 {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.5rem;
+  color: var(--primary);
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+}
+
+.articleBody h3 {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.25rem;
+  color: var(--primary);
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-xs);
+}
+
+.articleBody p {
+  margin-bottom: var(--space-md);
+}
+
+.articleBody ul, .articleBody ol {
+  margin-bottom: var(--space-md);
+  padding-left: var(--space-md);
+}
+
+.articleBody li {
+  margin-bottom: 4px;
+}
+
+.articleBody strong {
+  color: var(--primary);
+}
+
+.articleBody a {
+  color: var(--secondary);
+  text-decoration: underline;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.articleBody a:hover {
+  color: var(--primary);
+}
+
+/* Footer of the article card */
+.articleFooter {
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tags {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.tagLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.tagValue {
+  background-color: var(--bg-soft);
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+/* Sidebar structure */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.widget {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.widgetTitle {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.2rem;
+  color: var(--primary);
+  margin-bottom: var(--space-md);
+  padding-bottom: 6px;
+  border-bottom: 1.5px solid var(--accent);
+  display: inline-block;
+}
+
+/* Recent posts listing widget */
+.recentList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.recentItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+
+.recentImageContainer {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+}
+
+.recentImage {
+  object-fit: cover;
+}
+
+.recentText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.recentLink {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.3;
+  transition: color var(--transition-fast);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.recentLink:hover {
+  color: var(--secondary);
+}
+
+.recentDate {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Categories widget list */
+.categoriesMenu {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.categoriesMenu li {
+  border-bottom: 1px dashed var(--border);
+  padding-bottom: var(--space-xs);
+}
+
+.categoriesMenu li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.catLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-main);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.catLink:hover {
+  color: var(--secondary);
+  padding-left: 4px;
+}
+
+.catCount {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}

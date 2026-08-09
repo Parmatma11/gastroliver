@@ -1,0 +1,112 @@
+.heroSection {
+  position: relative;
+  height: 80vh;
+  min-height: 550px;
+  background-color: var(--primary);
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-slow), transform var(--transition-slow), visibility var(--transition-slow);
+  transform: scale(1.02);
+}
+
+.slideActive {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.slideOverlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(11, 30, 54, 0.65); /* authoritative navy tint */
+  z-index: 1;
+}
+
+.slideContent {
+  position: relative;
+  z-index: 2;
+  color: var(--bg-main);
+  max-width: 700px;
+}
+
+.slideSubtitle {
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-xs);
+  display: block;
+}
+
+.slideTitle {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 600;
+  line-height: 1.25;
+  margin-bottom: var(--space-sm);
+  color: var(--bg-main);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  font-family: var(--font-serif), Georgia, serif;
+}
+
+.slideDesc {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: var(--space-lg);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.slideActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.heroOutlineBtn {
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  color: var(--bg-main) !important;
+}
+
+.heroOutlineBtn:hover {
+  border-color: var(--bg-main) !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Slider indicators (dots) */
+.sliderDots {
+  position: absolute;
+  bottom: var(--space-md);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background-color: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: all var(--transition-fast);
+}
+
+.dotActive {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  width: 24px;
+  border-radius: 99px;
+}

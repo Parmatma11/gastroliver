@@ -1,0 +1,278 @@
+.container {
+  background-color: var(--bg-main);
+  padding-bottom: var(--space-xl);
+}
+
+.contentWrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+  margin-top: var(--space-xl);
+}
+
+@media (min-width: 992px) {
+  .contentWrapper {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.mainColumn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+/* Article content layout */
+.articleBody {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  color: var(--text-main);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.articleBody h2 {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.6rem;
+  color: var(--primary);
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+}
+
+.articleBody h3 {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.3rem;
+  color: var(--primary);
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-xs);
+}
+
+.articleBody p {
+  margin-bottom: var(--space-md);
+}
+
+.articleBody ul, .articleBody ol {
+  margin-bottom: var(--space-md);
+  padding-left: var(--space-md);
+}
+
+.articleBody li {
+  margin-bottom: 4px;
+}
+
+.articleBody strong {
+  color: var(--primary);
+}
+
+.articleBody a {
+  color: var(--secondary);
+  text-decoration: underline;
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.articleBody a:hover {
+  color: var(--primary);
+}
+
+/* Consultation Callout Box */
+.contentCTA {
+  background-color: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  padding: var(--space-lg);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+.contentCTA h3 {
+  font-family: var(--font-serif), Georgia, serif;
+  color: var(--primary);
+  font-size: 1.35rem;
+  margin-bottom: var(--space-xs);
+}
+
+.contentCTA p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: var(--space-md);
+}
+
+.ctaActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.phoneLink {
+  font-weight: 600;
+  color: var(--primary);
+  font-size: 0.95rem;
+  transition: color var(--transition-fast);
+}
+
+.phoneLink:hover {
+  color: var(--secondary);
+  text-decoration: underline;
+}
+
+/* Sidebar Widgets layout */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.widget {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.widgetTitle {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.2rem;
+  color: var(--primary);
+  margin-bottom: var(--space-md);
+  padding-bottom: 6px;
+  border-bottom: 1.5px solid var(--accent);
+  display: inline-block;
+}
+
+/* Procedures Menu list style */
+.proceduresMenu {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.proceduresMenu li {
+  border-bottom: 1px dashed var(--border);
+  padding-bottom: var(--space-xs);
+}
+
+.proceduresMenu li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.procLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-main);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.procLink:hover {
+  color: var(--secondary);
+  padding-left: 4px;
+}
+
+.procArrow {
+  width: 0.85rem;
+  height: 0.85rem;
+  color: var(--text-muted);
+  transition: transform var(--transition-fast);
+}
+
+.procLink:hover .procArrow {
+  color: var(--secondary);
+  transform: translateX(2px);
+}
+
+/* Contact detail styling */
+.contactDetails {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.contactItem {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.4;
+}
+
+.label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.value, .value a {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.value a:hover {
+  color: var(--secondary);
+  text-decoration: underline;
+}
+
+.addressValue {
+  font-size: 0.875rem;
+  color: var(--text-main);
+  font-style: normal;
+}
+
+/* Working Hours rows */
+.hoursList {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2px;
+}
+
+.hoursRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.825rem;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.05);
+  padding: 2px 0;
+}
+
+.hoursRow:last-child {
+  border-bottom: none;
+}
+
+.days {
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+.hours {
+  color: var(--text-muted);
+}
+
+.mapBtn {
+  margin-top: var(--space-xs);
+  display: block;
+  text-align: center;
+  background-color: var(--bg-soft);
+  border: 1px solid var(--border);
+  color: var(--primary);
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all var(--transition-fast);
+}
+
+.mapBtn:hover {
+  background-color: var(--secondary);
+  border-color: var(--secondary);
+  color: var(--bg-main);
+}

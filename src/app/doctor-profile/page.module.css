@@ -1,0 +1,256 @@
+.container {
+  background-color: var(--bg-main);
+  padding-bottom: var(--space-xl);
+}
+
+.profileWrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+  margin-top: var(--space-xl);
+}
+
+@media (min-width: 992px) {
+  .profileWrapper {
+    grid-template-columns: 350px 1fr;
+  }
+}
+
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* Portrait Image Card */
+.imageCard {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.portraitContainer {
+  position: relative;
+  width: 100%;
+  height: 350px;
+}
+
+.portrait {
+  object-fit: cover;
+}
+
+.quickInfo {
+  padding: var(--space-md);
+  text-align: center;
+}
+
+.quickInfo h2 {
+  font-family: var(--font-serif), Georgia, serif;
+  color: var(--primary);
+  font-size: 1.4rem;
+  margin-bottom: 2px;
+}
+
+.designation {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-bottom: var(--space-md);
+}
+
+.yearsBadge {
+  background-color: var(--bg-soft);
+  border: 1px solid var(--border);
+  padding: var(--space-sm);
+  border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+.badgeNumber {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.badgeText {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--primary);
+  text-align: left;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+
+/* Sidebar Widgets list styles */
+.sidebarWidget {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.sidebarWidget h3 {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.15rem;
+  color: var(--primary);
+  margin-bottom: var(--space-sm);
+  border-bottom: 1.5px solid var(--accent);
+  padding-bottom: 4px;
+  display: inline-block;
+}
+
+.widgetList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.widgetList li {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--text-main);
+  border-bottom: 1px dashed var(--border);
+  padding-bottom: var(--space-xs);
+}
+
+.widgetList li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* Right Column Bio & Timeline */
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.sectionHeader {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: var(--space-xs);
+}
+
+.bioText p {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  color: var(--text-main);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: var(--space-md);
+}
+
+.bioText p:last-child {
+  margin-bottom: 0;
+}
+
+/* Education timelines */
+.eduSection h3, .careerTimelineSection h3 {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.4rem;
+  color: var(--primary);
+  margin-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+}
+
+.eduTimeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.eduItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+}
+
+.eduYear {
+  background-color: var(--primary);
+  color: var(--bg-main);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: var(--radius-xs);
+  flex-shrink: 0;
+  width: 80px;
+  text-align: center;
+}
+
+.eduContent h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 2px;
+}
+
+.eduContent p {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+/* Professional Timeline */
+.careerTimeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  position: relative;
+  padding-left: var(--space-md);
+  border-left: 2px solid var(--border);
+}
+
+.timelineItem {
+  position: relative;
+  margin-bottom: var(--space-sm);
+}
+
+.timelineItem:last-child {
+  margin-bottom: 0;
+}
+
+.timelineItem::before {
+  content: '';
+  position: absolute;
+  left: calc(-1 * var(--space-md) - 6px);
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  border: 2px solid var(--bg-main);
+}
+
+.timelinePeriod {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
+.timelineContent h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 2px;
+}
+
+.timelineContent h5 {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-main);
+}

@@ -1,0 +1,206 @@
+.container {
+  background-color: var(--bg-main);
+  padding-bottom: var(--space-xl);
+}
+
+.wrapper {
+  margin-top: var(--space-xl);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+}
+
+@media (min-width: 992px) {
+  .grid {
+    grid-template-columns: 1.1fr 1fr;
+  }
+}
+
+.infoCol, .formCol {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.infoCol h2, .formCol h2 {
+  font-family: var(--font-serif), Georgia, serif;
+  color: var(--primary);
+  font-size: 1.5rem;
+  margin-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+}
+
+.clinicIntro, .formIntro {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: var(--space-lg);
+}
+
+.detailsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.detailItem {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.4;
+}
+
+.label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.value, .value a {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.value a:hover {
+  color: var(--secondary);
+  text-decoration: underline;
+}
+
+.addressValue {
+  font-size: 0.95rem;
+  color: var(--text-main);
+  font-style: normal;
+}
+
+/* Opening hours table */
+.hoursList {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--space-xs);
+  background-color: var(--bg-soft);
+  padding: var(--space-sm);
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border);
+}
+
+.hoursRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  border-bottom: 1px dashed var(--border);
+  padding: 4px 0;
+}
+
+.hoursRow:last-child {
+  border-bottom: none;
+}
+
+.days {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.hours {
+  color: var(--text-main);
+}
+
+.mapContainer {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Contact Form controls */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.formGroup label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.formGroup input, .formGroup textarea {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.95rem;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  transition: all var(--transition-fast);
+}
+
+.formGroup input:focus, .formGroup textarea:focus {
+  outline: none;
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 3px rgba(28, 114, 128, 0.1);
+}
+
+.formGroup textarea {
+  resize: vertical;
+}
+
+/* Success notification */
+.successMessage {
+  text-align: center;
+  background-color: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--secondary);
+  padding: var(--space-xl) var(--space-lg);
+  border-radius: var(--radius-xs);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.successMessage h3 {
+  font-family: var(--font-serif), Georgia, serif;
+  color: var(--primary);
+  font-size: 1.5rem;
+}
+
+.successMessage p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: var(--space-sm);
+}
+
+.resetBtn {
+  background-color: var(--primary);
+  color: var(--bg-main);
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 10px 20px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.resetBtn:hover {
+  background-color: var(--secondary);
+}

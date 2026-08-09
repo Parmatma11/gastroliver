@@ -1,0 +1,38 @@
+.nav {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.85rem;
+  margin-bottom: var(--space-md);
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+}
+
+.separator {
+  color: var(--text-light);
+  margin: 0 0.5rem;
+  user-select: none;
+}
+
+.link {
+  color: var(--secondary);
+  transition: color var(--transition-fast);
+}
+
+.link:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.active {
+  color: var(--text-muted);
+  font-weight: 400;
+}

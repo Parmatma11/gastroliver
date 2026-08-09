@@ -1,0 +1,183 @@
+.container {
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Filter Bar */
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-xl);
+}
+
+.filterBtn {
+  background-color: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.filterBtn:hover {
+  border-color: var(--secondary);
+  color: var(--secondary);
+  background-color: rgba(28, 114, 128, 0.02);
+}
+
+.filterBtn.active {
+  background-color: var(--secondary);
+  color: var(--bg-main);
+  border-color: var(--secondary);
+}
+
+/* Gallery Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.galleryCard {
+  position: relative;
+  border: 1px solid var(--border);
+  background-color: var(--bg-soft);
+  padding: var(--space-xs);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition-normal);
+}
+
+.galleryCard:hover {
+  border-color: var(--secondary);
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+}
+
+.galleryImage {
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.galleryCard:hover .galleryImage {
+  transform: scale(1.05);
+}
+
+.overlay {
+  position: absolute;
+  inset: var(--space-xs);
+  background-color: rgba(11, 30, 54, 0.45);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  opacity: 0;
+  border-radius: var(--radius-sm);
+  transition: opacity var(--transition-normal);
+}
+
+.galleryCard:hover .overlay {
+  opacity: 1;
+}
+
+.categoryLabel {
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.zoomIcon {
+  width: 1.8rem;
+  height: 1.8rem;
+  color: var(--bg-main);
+}
+
+/* Lightbox Modal */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(11, 30, 54, 0.85);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  animation: fadeIn var(--transition-fast) forwards;
+}
+
+.lightboxContent {
+  position: relative;
+  background-color: var(--bg-card);
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  max-width: 900px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  animation: scaleUp var(--transition-normal) forwards;
+}
+
+.closeBtn {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: var(--bg-main);
+  font-size: 2.5rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.lightboxImageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  max-height: 75vh;
+}
+
+.lightboxImage {
+  object-fit: contain;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
