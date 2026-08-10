@@ -59,3 +59,15 @@
 .withImage .subtitle {
   color: rgba(255, 255, 255, 0.8);
 }
+
+.withImage a {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.withImage a:hover {
+  color: #ffffff !important;
+}
+
+.withImage span {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
