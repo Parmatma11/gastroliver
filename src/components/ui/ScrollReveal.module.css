@@ -1,0 +1,32 @@
+.reveal {
+  opacity: 0;
+  will-change: transform, opacity;
+  transition-property: transform, opacity;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.up {
+  transform: translateY(30px);
+}
+
+.down {
+  transform: translateY(-30px);
+}
+
+.left {
+  transform: translateX(30px);
+}
+
+.right {
+  transform: translateX(-30px);
+}
+
+.none {
+  transform: none;
+}
+
+/* Active State when in viewport */
+.reveal.active {
+  opacity: 1;
+  transform: translate(0, 0);
+}

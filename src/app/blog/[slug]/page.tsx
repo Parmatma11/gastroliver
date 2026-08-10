@@ -16,6 +16,44 @@ interface PageProps {
   }>;
 }
 
+function stripTableOfContents(markdown: string): string {
+  if (!markdown) return "";
+  
+  const lines = markdown.split('\n');
+  const resultLines: string[] = [];
+  let inToc = false;
+  
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+    
+    // Detect Table of Contents header
+    if (trimmed.toLowerCase() === 'table of contents') {
+      inToc = true;
+      continue;
+    }
+    
+    if (inToc) {
+      // Skip empty lines, Toggle button lines, and list items representing links
+      if (trimmed === '' || 
+          trimmed.includes('[Toggle') || 
+          trimmed.includes('](#)') || 
+          trimmed.startsWith('- [') || 
+          trimmed.startsWith('* [') ||
+          (trimmed.startsWith('-') && trimmed.includes('](#'))) {
+        continue;
+      }
+      
+      // End of TOC block
+      inToc = false;
+    }
+    
+    resultLines.push(line);
+  }
+  
+  return resultLines.join('\n');
+}
+
 // Generate metadata dynamically
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
@@ -52,7 +90,8 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   if (fs.existsSync(filePath)) {
     rawContent = fs.readFileSync(filePath, 'utf8');
-    contentHtml = parseMarkdownToHtml(rawContent);
+    const cleanedContent = stripTableOfContents(rawContent);
+    contentHtml = parseMarkdownToHtml(cleanedContent);
   } else {
     // Fallback description
     contentHtml = `<p>${post.metaDescription}</p><p>(This article's full content is currently being migrated and will be available shortly.)</p>`;

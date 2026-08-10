@@ -1,4 +1,5 @@
 import styles from './WhyChooseUs.module.css';
+import ScrollReveal from '../ui/ScrollReveal';
 
 export default function WhyChooseUs() {
   const points = [
@@ -28,19 +29,27 @@ export default function WhyChooseUs() {
       
       <div className={`container ${styles.containerContent}`}>
         <div className={`section-header ${styles.header}`}>
-          <h2 className={styles.sectionTitle}>Why Choose Gastroliver Clinic?</h2>
-          <p className={styles.sectionSubtitle}>We provide compassionate, evidence-based care backed by advanced clinical credentials and diagnostic technology</p>
+          <ScrollReveal direction="up" delay={0} duration={800}>
+            <h2 className={styles.sectionTitle}>Why Choose Gastroliver Clinic?</h2>
+            <p className={styles.sectionSubtitle}>We provide compassionate, evidence-based care backed by advanced clinical credentials and diagnostic technology</p>
+          </ScrollReveal>
         </div>
 
         <div className={styles.grid}>
           {points.map((point, index) => (
-            <div key={index} className={styles.pointCard}>
+            <ScrollReveal
+              key={index}
+              delay={index * 150}
+              duration={800}
+              direction="up"
+              className={styles.pointCard}
+            >
               <div className={styles.numberWrapper}>
                 <span className={styles.number}>{"//"} 0{index + 1}</span>
               </div>
               <h3 className={styles.title}>{point.title}</h3>
               <p className={styles.desc}>{point.desc}</p>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>

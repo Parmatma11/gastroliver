@@ -14,6 +14,7 @@ import WhyChooseUs from '../components/sections/WhyChooseUs';
 import { Metadata } from 'next';
 import GalleryPreview from '../components/sections/GalleryPreview';
 import styles from './page.module.css';
+import ScrollReveal from '../components/ui/ScrollReveal';
 
 export const metadata: Metadata = {
   title: "Best Gastroenterologist in Delhi | Dr. Ankita Gupta | GLEC",
@@ -80,7 +81,13 @@ export default function Home() {
         <div className="container">
           <div className={styles.actionsGrid}>
             {quickActionCards.map((card, i) => (
-              <div key={i} className={`${styles.actionCard} ${styles[`card-${card.variant}`]}`}>
+              <ScrollReveal
+                key={i}
+                delay={i * 100}
+                duration={800}
+                direction="up"
+                className={`${styles.actionCard} ${styles[`card-${card.variant}`]}`}
+              >
                 <div className={styles.cardBgWrapper}>
                   <Image
                     src={card.image}
@@ -104,7 +111,7 @@ export default function Home() {
                     </Link>
                   )}
                 </div>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -113,11 +120,15 @@ export default function Home() {
       {/* 3. DOCTOR PROFILE SNIPPET */}
       <section id="doctor" className="section-padding">
         <div className="container">
-          <div className="section-header">
-            <h2>Our Chief Consultant</h2>
-            <p>Dr. Ankita Gupta brings academic distinction and global motility training to South Delhi patients</p>
-          </div>
-          <DoctorProfileSnippet />
+          <ScrollReveal direction="up" delay={0} duration={800}>
+            <div className="section-header">
+              <h2>Our Chief Consultant</h2>
+              <p>Dr. Ankita Gupta brings academic distinction and global motility training to South Delhi patients</p>
+            </div>
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={150} duration={800}>
+            <DoctorProfileSnippet />
+          </ScrollReveal>
         </div>
       </section>
 
@@ -127,25 +138,37 @@ export default function Home() {
       {/* 5. INTERACTIVE TREATMENT TABS */}
       <section id="treatments" className="section-padding">
         <div className="container">
-          <div className="section-header">
-            <h2>Conditions We Treat</h2>
-            <p>Expert diagnostic validation and treatment guidelines for common gastrointestinal disorders</p>
-          </div>
-          <TreatmentTabs />
+          <ScrollReveal direction="up" delay={0} duration={800}>
+            <div className="section-header">
+              <h2>Conditions We Treat</h2>
+              <p>Expert diagnostic validation and treatment guidelines for common gastrointestinal disorders</p>
+            </div>
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={150} duration={800}>
+            <TreatmentTabs />
+          </ScrollReveal>
         </div>
       </section>
 
       {/* 6. PROCESS STEPS */}
       <section className="section-padding bg-soft-slab">
         <div className="container">
-          <div className="section-header">
-            <h2>Your Journey to Health</h2>
-            <p>A streamlined, medical approach to diagnosis, consulting, and care</p>
-          </div>
+          <ScrollReveal direction="up" delay={0} duration={800}>
+            <div className="section-header">
+              <h2>Your Journey to Health</h2>
+              <p>A streamlined, medical approach to diagnosis, consulting, and care</p>
+            </div>
+          </ScrollReveal>
 
           <div className={styles.processGrid}>
             {processSteps.map((step, i) => (
-              <div key={i} className={styles.processCard}>
+              <ScrollReveal
+                key={i}
+                delay={i * 150}
+                duration={800}
+                direction="up"
+                className={styles.processCard}
+              >
                 <div className={styles.processImageWrapper}>
                   <Image
                     src={step.image}
@@ -158,7 +181,7 @@ export default function Home() {
                 </div>
                 <h3 className={styles.processTitle}>{step.title}</h3>
                 <p className={styles.processDesc}>{step.description}</p>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -166,7 +189,7 @@ export default function Home() {
 
       {/* 7. STATS COUNTERS */}
       <section className={styles.statsSection}>
-        <div className={`container ${styles.statsGrid}`}>
+        <ScrollReveal direction="up" delay={0} duration={800} className={`container ${styles.statsGrid}`}>
           {statCounters.map((stat, i) => (
             <div key={i} className={styles.statCard}>
               <span className={styles.statValue}>
@@ -178,36 +201,44 @@ export default function Home() {
               </span>
             </div>
           ))}
-        </div>
+        </ScrollReveal>
       </section>
 
       {/* 8. FACILITIES / PROCEDURES GRID */}
       <section id="facilities" className="section-padding bg-soft-slab">
         <div className="container">
-          <div className="section-header">
-            <h2>Advanced Diagnostic Facilities</h2>
-            <p>Equipped with high-definition endoscopic platforms, ultrasound-based Fibroscan, and motility labs</p>
-          </div>
+          <ScrollReveal direction="up" delay={0} duration={800}>
+            <div className="section-header">
+              <h2>Advanced Diagnostic Facilities</h2>
+              <p>Equipped with high-definition endoscopic platforms, ultrasound-based Fibroscan, and motility labs</p>
+            </div>
+          </ScrollReveal>
 
           <div className="grid grid-3">
             {facilitiesData.slice(0, 6).map((fac, i) => (
-              <ProcedureCard
+              <ScrollReveal
                 key={i}
-                slug={fac.slug}
-                title={fac.title}
-                seo={{ title: fac.title, description: fac.description }}
-                metaDescription={fac.description}
-                descriptionSnippet={fac.description}
-                icon={fac.icon}
-              />
+                delay={(i % 3) * 100}
+                duration={800}
+                direction="up"
+              >
+                <ProcedureCard
+                  slug={fac.slug}
+                  title={fac.title}
+                  seo={{ title: fac.title, description: fac.description }}
+                  metaDescription={fac.description}
+                  descriptionSnippet={fac.description}
+                  icon={fac.icon}
+                />
+              </ScrollReveal>
             ))}
           </div>
           
-          <div className={styles.viewMoreRow}>
+          <ScrollReveal direction="up" delay={100} duration={800} className={styles.viewMoreRow}>
             <Button variant="outline" size="lg" href="/sitemap/">
               View All Diagnostic Procedures
             </Button>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
@@ -217,24 +248,34 @@ export default function Home() {
       {/* 10. LATEST BLOG POSTS */}
       <section id="blog" className="section-padding bg-soft-slab">
         <div className="container">
-          <div className="section-header">
-            <h2>From the Health Blog</h2>
-            <p>Clinical dietary charts and liver health education written directly by Dr. Ankita Gupta</p>
-          </div>
+          <ScrollReveal direction="up" delay={0} duration={800}>
+            <div className="section-header">
+              <h2>From the Health Blog</h2>
+              <p>Clinical dietary charts and liver health education written directly by Dr. Ankita Gupta</p>
+            </div>
+          </ScrollReveal>
 
           <div className="grid grid-3">
             {latestBlogPosts.map((post, i) => (
-              <BlogCard key={i} {...post} />
+              <ScrollReveal
+                key={i}
+                delay={i * 150}
+                duration={800}
+                direction="up"
+              >
+                <BlogCard {...post} />
+              </ScrollReveal>
             ))}
           </div>
 
-          <div className={styles.viewMoreRow}>
+          <ScrollReveal direction="up" delay={100} duration={800} className={styles.viewMoreRow}>
             <Button variant="primary" size="lg" href="/blog/">
               Visit Medical Blog
             </Button>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
+
     </div>
   );
 }
