@@ -38,7 +38,7 @@ export default function ContactPageContent() {
         title="Contact Us"
         subtitle="Schedule a consultation, ask a question, or find GLEC clinic directions"
         breadcrumbs={breadcrumbs}
-        bannerImage="/images/clinic/hslider4.jpg"
+        compact
       />
 
       <section className={`container ${styles.wrapper}`}>

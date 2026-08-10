@@ -52,7 +52,7 @@ export default function HospitalPage() {
         title="Hospital Affiliations"
         subtitle="Affiliated Tertiary Care Center Services & Major Interventions"
         breadcrumbs={breadcrumbs}
-        bannerImage="/images/clinic/hslider4.jpg"
+        compact
       />
 
       <section className={`container ${styles.wrapper}`}>

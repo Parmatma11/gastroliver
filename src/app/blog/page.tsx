@@ -98,7 +98,7 @@ export default function BlogIndexPage() {
         title="Medical Articles & Insights"
         subtitle="Professional gastrointestinal health updates, diet charts, and liver care guidelines"
         breadcrumbs={breadcrumbs}
-        bannerImage="/images/clinic/hslider4.jpg"
+        compact
       />
 
       <section className={`container ${styles.wrapper}`}>

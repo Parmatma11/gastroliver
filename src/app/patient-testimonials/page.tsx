@@ -24,7 +24,7 @@ export default function TestimonialsPage() {
         title="Patient Testimonials"
         subtitle="What our patients say about their clinical care and recovery experience at GLEC"
         breadcrumbs={breadcrumbs}
-        bannerImage="/images/clinic/hslider4.jpg"
+        compact
       />
 
       <section className={`container ${styles.wrapper}`}>

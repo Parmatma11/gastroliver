@@ -237,6 +237,5 @@
   margin-top: var(--space-xl);
 }
 .viewMoreRow a {
-  color: inherit;
   display: block;
 }

@@ -124,7 +124,7 @@ export default function ProceduresIndexPage() {
         title="Procedures & Facilities"
         subtitle="Advanced diagnostic endoscopy, liver screening, and therapeutic GI procedures"
         breadcrumbs={breadcrumbs}
-        bannerImage="/images/clinic/hslider4.jpg"
+        compact
       />
 
       <section className={`container ${styles.wrapper}`}>

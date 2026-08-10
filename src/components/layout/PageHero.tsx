@@ -11,12 +11,13 @@ interface PageHeroProps {
   subtitle?: string;
   breadcrumbs: BreadcrumbItem[];
   bannerImage?: string;
+  compact?: boolean;
 }
 
-export default function PageHero({ title, subtitle, breadcrumbs, bannerImage }: PageHeroProps) {
+export default function PageHero({ title, subtitle, breadcrumbs, bannerImage, compact }: PageHeroProps) {
   return (
     <section 
-      className={`${styles.hero} ${bannerImage ? styles.withImage : ''}`}
+      className={`${styles.hero} ${bannerImage ? styles.withImage : ''} ${compact ? styles.compact : ''}`}
       style={bannerImage ? { backgroundImage: `url(${bannerImage})` } : undefined}
     >
       <div className={styles.overlay}></div>

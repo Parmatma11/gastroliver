@@ -75,10 +75,10 @@ export default function DoctorProfilePage() {
   return (
     <main className={styles.container}>
       <PageHero
-        title="Doctor Profile"
+        title="Dr. Ankita Gupta"
         subtitle="Dr. Ankita Gupta – Chief Consultant Gastroenterologist & Hepatologist"
         breadcrumbs={breadcrumbs}
-        bannerImage="/images/doctor/intro_1.jpg"
+        compact
       />
 
       {/* ══════ SECTION 1: Identity Card ══════ */}
@@ -105,7 +105,7 @@ export default function DoctorProfilePage() {
               <span className={styles.roleTag}>Chief Consultant</span>
               <h1 className={styles.doctorName}>{doctorData.name}</h1>
               <p className={styles.doctorDesignation}>{doctorData.designation}</p>
-              
+
               <div className={styles.qualPills}>
                 {doctorData.qualifications.map((q, i) => (
                   <span key={i} className={styles.qualPill}>

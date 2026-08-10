@@ -95,7 +95,7 @@ export default function GalleryPageContent() {
         title="Clinic Gallery"
         subtitle="A tour of Gastro Liver Endoscopy Centre facilities, equipment, and consulting rooms"
         breadcrumbs={breadcrumbs}
-        bannerImage="/images/clinic/hslider4.jpg"
+        compact
       />
 
       <section className={`container ${styles.wrapper}`}>

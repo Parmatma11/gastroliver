@@ -23,39 +23,60 @@ export default function HeroSlider() {
 
   return (
     <section className={styles.heroSection} aria-label="Welcome banner">
-      {heroSlides.map((slide, index) => (
-        <div
-          key={index}
-          className={`${styles.slide} ${activeSlide === index ? styles.slideActive : ''}`}
-        >
+      <div className={`container ${styles.sliderContainer}`}>
+        {heroSlides.map((slide, index) => (
           <div
-            className={styles.slideBg}
-            style={{ backgroundImage: `url(${slide.backgroundImage})` }}
-          />
-          <div className={styles.slideOverlay}></div>
-          <div className={`container ${styles.slideContent}`}>
-            <span className={`${styles.slideSubtitle} ${activeSlide === index ? 'fade-up-stagger delay-1' : ''}`}>{slide.subtitle}</span>
-            <h2 className={`${styles.slideTitle} ${activeSlide === index ? 'fade-up-stagger delay-2' : ''}`}>{slide.title}</h2>
-            <p className={`${styles.slideDesc} ${activeSlide === index ? 'fade-up-stagger delay-3' : ''}`}>{slide.description}</p>
-            <div className={`${styles.slideActions} ${activeSlide === index ? 'fade-up-stagger delay-4' : ''}`}>
-              <Button variant="secondary" size="lg" onClick={handleOpenAppointment}>
-                {slide.ctaText}
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className={styles.heroOutlineBtn}
-                onClick={() => {
-                  const target = document.getElementById('treatments');
-                  target?.scrollIntoView({ behavior: 'smooth' });
-                }}
-              >
-                Explore Services
-              </Button>
+            key={index}
+            className={`${styles.slide} ${activeSlide === index ? styles.slideActive : ''}`}
+          >
+            {/* Left: Text Content */}
+            <div className={styles.textContent}>
+              <span className={`${styles.slideSubtitle} ${activeSlide === index ? 'fade-up-stagger delay-1' : ''}`}>
+                {slide.subtitle}
+              </span>
+              <h2 className={`${styles.slideTitle} ${activeSlide === index ? 'fade-up-stagger delay-2' : ''}`}>
+                {slide.title}
+              </h2>
+              <p className={`${styles.slideDesc} ${activeSlide === index ? 'fade-up-stagger delay-3' : ''}`}>
+                {slide.description}
+              </p>
+              <div className={`${styles.slideActions} ${activeSlide === index ? 'fade-up-stagger delay-4' : ''}`}>
+                {slide.ctaLink === "#appointment-modal" ? (
+                  <Button variant="secondary" size="lg" onClick={handleOpenAppointment}>
+                    {slide.ctaText}
+                  </Button>
+                ) : (
+                  <Button variant="secondary" size="lg" href="/procedures/">
+                    {slide.ctaText}
+                  </Button>
+                )}
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className={styles.heroOutlineBtn}
+                  onClick={() => {
+                    const target = document.getElementById('treatments');
+                    target?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
+                  Explore Services
+                </Button>
+              </div>
+            </div>
+
+            {/* Right: Framed Image */}
+            <div className={styles.imageContent}>
+              <div className={styles.imageWrapper}>
+                <img
+                  src={slide.backgroundImage}
+                  alt={slide.title}
+                  className={styles.slideImage}
+                />
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
 
       {/* Slider dots */}
       <div className={styles.sliderDots}>

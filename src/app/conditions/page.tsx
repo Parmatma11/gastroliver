@@ -110,7 +110,7 @@ export default function ConditionsIndexPage() {
         title="Diseases We Treat"
         subtitle="Comprehensive clinical guide, diagnostics, and advanced treatment options"
         breadcrumbs={breadcrumbs}
-        bannerImage="/images/clinic/hslider4.jpg"
+        compact
       />
 
       <section className={`container ${styles.wrapper}`}>
