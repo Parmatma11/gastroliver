@@ -39,6 +39,7 @@
   from {
     transform: scale(1.08);
   }
+
   to {
     transform: scale(1);
   }
@@ -148,19 +149,23 @@
     height: auto;
     min-height: 480px;
   }
+
   .slide {
     padding-top: 100px;
     padding-bottom: 60px;
     align-items: flex-start;
   }
+
   .slideTitle {
     font-size: 1.8rem !important;
     margin-bottom: var(--space-xs);
   }
+
   .slideDesc {
     font-size: 0.9rem !important;
     margin-bottom: var(--space-md);
   }
+
   .sliderDots {
     bottom: var(--space-sm);
   }

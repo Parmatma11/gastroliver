@@ -13,6 +13,8 @@
   border-bottom: 1px solid var(--border);
   scrollbar-width: none; /* Hide scrollbar for Firefox */
   -ms-overflow-style: none; /* Hide scrollbar for IE */
+  min-width: 0;
+  width: 100%;
 }
 
 .mobileScrollMenu::-webkit-scrollbar {

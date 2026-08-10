@@ -97,6 +97,13 @@ export default function ConditionsIndexPage() {
     return cat ? cat.label : 'Gastroenterology';
   };
 
+  const getCategoryCount = (key: string): number => {
+    if (key === 'all') {
+      return diseasesData.length;
+    }
+    return diseasesData.filter(d => d.category === key).length;
+  };
+
   return (
     <main className={styles.container}>
       <PageHero
@@ -116,7 +123,7 @@ export default function ConditionsIndexPage() {
                 className={`${styles.filterBtn} ${activeCategory === cat.key ? styles.active : ''}`}
                 onClick={() => setActiveCategory(cat.key)}
               >
-                {cat.label}
+                {cat.label} ({getCategoryCount(cat.key)})
               </button>
             ))}
           </div>

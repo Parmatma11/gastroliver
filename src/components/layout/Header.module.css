@@ -182,7 +182,8 @@
   align-items: center;
 }
 
-.link, .dropdownTrigger {
+.link,
+.dropdownTrigger {
   color: var(--primary);
   font-size: 0.85rem;
   font-weight: 500;
@@ -209,7 +210,8 @@
   transition: transform var(--transition-fast);
 }
 
-.link:hover, .dropdownTrigger:hover {
+.link:hover,
+.dropdownTrigger:hover {
   color: var(--secondary);
 }
 
@@ -374,7 +376,8 @@
   border-bottom: 1px solid var(--border);
 }
 
-.mobileLink, .mobileDropdownTrigger {
+.mobileLink,
+.mobileDropdownTrigger {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -449,12 +452,16 @@
   .navList {
     gap: var(--space-xs) !important;
   }
-  .link, .dropdownTrigger {
+
+  .link,
+  .dropdownTrigger {
     font-size: 0.8rem !important;
   }
+
   .brandSubtitle {
     display: none !important;
   }
+
   .ctaBtn {
     padding: 0.4rem 0.6rem !important;
     font-size: 0.8rem !important;

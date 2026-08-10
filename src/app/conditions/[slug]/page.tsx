@@ -43,40 +43,11 @@ export async function generateStaticParams() {
 
 function stripTableOfContents(markdown: string): string {
   if (!markdown) return "";
-  
-  const lines = markdown.split('\n');
-  const resultLines: string[] = [];
-  let inToc = false;
-  
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    const trimmed = line.trim();
-    
-    // Detect Table of Contents header
-    if (trimmed.toLowerCase() === 'table of contents') {
-      inToc = true;
-      continue;
-    }
-    
-    if (inToc) {
-      // Skip empty lines, Toggle button lines, and list items representing links
-      if (trimmed === '' || 
-          trimmed.includes('[Toggle') || 
-          trimmed.includes('](#)') || 
-          trimmed.startsWith('- [') || 
-          trimmed.startsWith('* [') ||
-          (trimmed.startsWith('-') && trimmed.includes('](#'))) {
-        continue;
-      }
-      
-      // End of TOC block
-      inToc = false;
-    }
-    
-    resultLines.push(line);
+  const h1Index = markdown.indexOf('# ');
+  if (h1Index !== -1) {
+    return markdown.slice(h1Index);
   }
-  
-  return resultLines.join('\n');
+  return markdown;
 }
 
 export default async function DiseasePage({ params }: PageProps) {
@@ -110,7 +81,7 @@ export default async function DiseasePage({ params }: PageProps) {
 
   const breadcrumbs = [
     { label: 'Home', path: '/' },
-    { label: 'Conditions', path: '/sitemap/' },
+    { label: 'Conditions', path: '/conditions/' },
     { label: disease.title }
   ];
 

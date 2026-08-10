@@ -51,6 +51,13 @@ export default function ProceduresIndexPage() {
     return cat ? cat.label : 'Diagnostics';
   };
 
+  const getCategoryCount = (key: string): number => {
+    if (key === 'all') {
+      return proceduresData.length;
+    }
+    return proceduresData.filter(p => getProcedureCategory(p.slug) === key).length;
+  };
+
   // Fetch procedure details on card click
   const handleCardClick = (procedure: typeof proceduresData[0]) => {
     setSelectedProcedure(procedure);
@@ -130,7 +137,7 @@ export default function ProceduresIndexPage() {
                 className={`${styles.filterBtn} ${activeCategory === cat.key ? styles.active : ''}`}
                 onClick={() => setActiveCategory(cat.key)}
               >
-                {cat.label}
+                {cat.label} ({getCategoryCount(cat.key)})
               </button>
             ))}
           </div>

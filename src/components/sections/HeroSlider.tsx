@@ -28,7 +28,7 @@ export default function HeroSlider() {
           key={index}
           className={`${styles.slide} ${activeSlide === index ? styles.slideActive : ''}`}
         >
-          <div 
+          <div
             className={styles.slideBg}
             style={{ backgroundImage: `url(${slide.backgroundImage})` }}
           />
@@ -56,7 +56,7 @@ export default function HeroSlider() {
           </div>
         </div>
       ))}
-      
+
       {/* Slider dots */}
       <div className={styles.sliderDots}>
         {heroSlides.map((_, i) => (
