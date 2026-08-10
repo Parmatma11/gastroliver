@@ -1,256 +1,874 @@
+/* ═══════════════════════════════════════════════
+   Doctor Profile Page — Futuristic Card Layout
+   ═══════════════════════════════════════════════ */
+
 .container {
   background-color: var(--bg-main);
-  padding-bottom: var(--space-xl);
+  padding-bottom: var(--space-xxl);
 }
 
-.profileWrapper {
+/* ── Section Tag (reusable) ── */
+.sectionTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--secondary);
+  margin-bottom: var(--space-md);
+  padding: 0.4rem 1rem;
+  background: rgba(27, 58, 107, 0.04);
+  border: 1px solid rgba(27, 58, 107, 0.1);
+  border-radius: 100px;
+}
+
+.tagIcon {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+/* ══════════════════════════════════════════
+   SECTION 1: Identity Card
+   ══════════════════════════════════════════ */
+.identitySection {
+  margin-top: calc(-1 * var(--space-xl));
+  position: relative;
+  z-index: 2;
+}
+
+.identityCard {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-xl);
-  margin-top: var(--space-xl);
+  gap: var(--space-lg);
+  background: var(--bg-card);
+  border: 1px solid rgba(4, 13, 26, 0.1);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 60px -15px rgba(4, 13, 26, 0.12);
+  padding: var(--space-md);
+  align-items: center;
 }
 
-@media (min-width: 992px) {
-  .profileWrapper {
-    grid-template-columns: 350px 1fr;
+@media (min-width: 768px) {
+  .identityCard {
+    grid-template-columns: 280px 1fr;
+    padding: var(--space-lg) var(--space-xl);
   }
 }
 
-.leftColumn {
+.identityLeft {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
+  justify-content: center;
 }
 
-/* Portrait Image Card */
-.imageCard {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-}
-
-.portraitContainer {
+.portraitFrame {
   position: relative;
-  width: 100%;
-  height: 350px;
+  width: 240px;
+  height: 300px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 3px solid rgba(4, 13, 26, 0.06);
+  box-shadow: 0 8px 24px rgba(4, 13, 26, 0.1);
 }
 
 .portrait {
   object-fit: cover;
+  transition: transform 0.6s ease;
 }
 
-.quickInfo {
-  padding: var(--space-md);
+.identityCard:hover .portrait {
+  transform: scale(1.03);
+}
+
+.goldBadge {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  background: linear-gradient(135deg, rgba(4, 13, 26, 0.85), rgba(4, 13, 26, 0.95));
+  backdrop-filter: blur(10px);
+  color: var(--accent);
+  padding: 0.5rem 0.8rem;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.identityRight {
+  display: flex;
+  flex-direction: column;
   text-align: center;
 }
 
-.quickInfo h2 {
-  font-family: var(--font-serif), Georgia, serif;
-  color: var(--primary);
-  font-size: 1.4rem;
-  margin-bottom: 2px;
+@media (min-width: 768px) {
+  .identityRight {
+    text-align: left;
+  }
 }
 
-.designation {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  font-weight: 500;
-  margin-bottom: var(--space-md);
-}
-
-.yearsBadge {
-  background-color: var(--bg-soft);
-  border: 1px solid var(--border);
-  padding: var(--space-sm);
-  border-radius: var(--radius-xs);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-sm);
-}
-
-.badgeNumber {
-  font-family: var(--font-serif), Georgia, serif;
-  font-size: 1.8rem;
+.roleTag {
+  font-size: 0.72rem;
   font-weight: 700;
-  color: var(--accent);
-  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--secondary);
+  margin-bottom: 0.3rem;
 }
 
-.badgeText {
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
+.doctorName {
+  font-size: 2rem;
   color: var(--primary);
-  text-align: left;
-  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
   line-height: 1.2;
 }
 
-/* Sidebar Widgets list styles */
-.sidebarWidget {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: var(--space-md);
-  box-shadow: var(--shadow-sm);
+@media (min-width: 768px) {
+  .doctorName {
+    font-size: 2.4rem;
+  }
 }
 
-.sidebarWidget h3 {
-  font-family: var(--font-serif), Georgia, serif;
-  font-size: 1.15rem;
-  color: var(--primary);
-  margin-bottom: var(--space-sm);
-  border-bottom: 1.5px solid var(--accent);
-  padding-bottom: 4px;
-  display: inline-block;
+.doctorDesignation {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-bottom: var(--space-md);
 }
 
-.widgetList {
-  list-style: none;
+.qualPills {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: var(--space-md);
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .qualPills {
+    justify-content: flex-start;
+  }
+}
+
+.qualPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: linear-gradient(135deg, rgba(27, 58, 107, 0.04), rgba(27, 58, 107, 0.08));
+  border: 1px solid rgba(27, 58, 107, 0.12);
+  color: var(--primary);
+  padding: 0.35rem 0.75rem;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.pillIcon {
+  width: 0.85rem;
+  height: 0.85rem;
+  color: var(--secondary);
+  flex-shrink: 0;
+}
+
+.identityActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .identityActions {
+    justify-content: flex-start;
+  }
+}
+
+.phoneLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--primary);
+  padding: 0.6rem 1rem;
+  border: 1px solid rgba(4, 13, 26, 0.12);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.phoneLink:hover {
+  border-color: var(--secondary);
+  color: var(--secondary);
+}
+
+.phoneSvg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* ══════════════════════════════════════════
+   SECTION 2: Stats Row
+   ══════════════════════════════════════════ */
+.statsSection {
+  margin-top: var(--space-xl);
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--space-sm);
 }
 
-.widgetList li {
-  font-size: 0.85rem;
-  line-height: 1.4;
-  color: var(--text-main);
-  border-bottom: 1px dashed var(--border);
-  padding-bottom: var(--space-xs);
+@media (min-width: 768px) {
+  .statsGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
-.widgetList li:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+.statCard {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: var(--space-md);
+  background: var(--bg-card);
+  border: 1px solid rgba(4, 13, 26, 0.08);
+  border-radius: var(--radius-md);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-/* Right Column Bio & Timeline */
-.rightColumn {
+.statCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(4, 13, 26, 0.08);
+}
+
+.statIcon {
+  font-size: 1.6rem;
+  line-height: 1;
+  min-width: 2.2rem;
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(27, 58, 107, 0.06);
+  border-radius: var(--radius-sm);
+}
+
+.statInfo {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xl);
 }
 
-.sectionHeader {
-  font-size: 0.75rem;
+.statValue {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1.2;
+}
+
+.statLabel {
+  font-size: 0.72rem;
   font-weight: 600;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
   color: var(--text-muted);
-  letter-spacing: 0.1em;
-  display: block;
-  margin-bottom: var(--space-xs);
 }
 
-.bioText p {
-  font-family: var(--font-sans), system-ui, sans-serif;
+/* ══════════════════════════════════════════
+   SECTION 3: About / Biography
+   ══════════════════════════════════════════ */
+.aboutSection {
+  margin-top: var(--space-xl);
+}
+
+.aboutCard {
+  background: var(--bg-card);
+  border: 1px solid rgba(4, 13, 26, 0.08);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: 0 4px 16px rgba(4, 13, 26, 0.04);
+}
+
+.bioQuote {
+  border-left: 3px solid var(--accent);
+  padding: 1rem 1.5rem;
+  margin: 0 0 var(--space-lg);
+  font-style: italic;
+  color: var(--primary);
+  background: rgba(197, 160, 89, 0.03);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.bioBody p {
+  font-size: 0.95rem;
+  line-height: 1.75;
   color: var(--text-main);
-  font-size: 1rem;
-  line-height: 1.6;
   margin-bottom: var(--space-md);
 }
 
-.bioText p:last-child {
+.bioBody p:last-child {
   margin-bottom: 0;
 }
 
-/* Education timelines */
-.eduSection h3, .careerTimelineSection h3 {
-  font-family: var(--font-serif), Georgia, serif;
-  font-size: 1.4rem;
-  color: var(--primary);
-  margin-bottom: var(--space-md);
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 6px;
+/* ══════════════════════════════════════════
+   SECTION 4: Training & Specialties
+   ══════════════════════════════════════════ */
+.specialtiesSection {
+  margin-top: var(--space-xl);
 }
 
-.eduTimeline {
+.specialtyGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+.specialtyGrid > * {
+  height: 100%;
+}
+
+@media (min-width: 640px) {
+  .specialtyGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.specialtyCard {
+  background: var(--bg-card);
+  border: 1px solid rgba(4, 13, 26, 0.08);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg) var(--space-md);
+  text-align: center;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  align-items: center;
+  justify-content: center;
 }
 
-.eduItem {
+.specialtyCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--secondary), var(--accent));
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.specialtyCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(4, 13, 26, 0.1);
+  border-color: rgba(27, 58, 107, 0.15);
+}
+
+.specialtyCard:hover::before {
+  opacity: 1;
+}
+
+.specialtyIconWrap {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto var(--space-sm);
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--secondary), var(--primary));
   display: flex;
-  align-items: flex-start;
-  gap: var(--space-md);
+  align-items: center;
+  justify-content: center;
 }
 
-.eduYear {
-  background-color: var(--primary);
-  color: var(--bg-main);
-  font-family: var(--font-serif), Georgia, serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  padding: 4px 12px;
-  border-radius: var(--radius-xs);
-  flex-shrink: 0;
-  width: 80px;
-  text-align: center;
+.specialtySvg {
+  width: 22px;
+  height: 22px;
+  color: #ffffff;
 }
 
-.eduContent h4 {
+.specialtyCard h4 {
   font-size: 0.95rem;
   font-weight: 700;
   color: var(--primary);
-  margin-bottom: 2px;
+  margin-bottom: 0.3rem;
 }
 
-.eduContent p {
-  font-size: 0.875rem;
+.specialtyCard p {
+  font-size: 0.82rem;
   color: var(--text-muted);
-}
-
-.careerTimeline {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
-  position: relative;
-  padding-left: var(--space-md);
-  border-left: 2px solid var(--border);
-}
-
-.timelineItem {
-  position: relative;
+  line-height: 1.4;
   margin-bottom: var(--space-sm);
 }
 
-.timelineItem:last-child {
-  margin-bottom: 0;
+.specialtyBadge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--secondary);
+  background: rgba(27, 58, 107, 0.06);
+  border: 1px solid rgba(27, 58, 107, 0.1);
+  padding: 0.2rem 0.6rem;
+  border-radius: 100px;
 }
 
-.timelineItem::before {
-  content: '';
-  position: absolute;
-  left: calc(-1 * var(--space-md) - 6px);
-  top: 4px;
-  width: 10px;
-  height: 10px;
+/* ══════════════════════════════════════════
+   SECTION 5: Academic Background
+   ══════════════════════════════════════════ */
+.educationSection {
+  margin-top: var(--space-xl);
+}
+
+.eduGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+.eduGrid > * {
+  height: 100%;
+}
+
+@media (min-width: 640px) {
+  .eduGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.eduCard {
+  background: var(--bg-card);
+  border: 1px solid rgba(4, 13, 26, 0.08);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg) var(--space-md);
+  text-align: center;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.eduCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(4, 13, 26, 0.08);
+}
+
+.eduYearBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  background-color: var(--accent);
-  border: 2px solid var(--bg-main);
-  box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.2);
+  background: linear-gradient(135deg, var(--primary), rgba(4, 13, 26, 0.85));
+  color: var(--bg-main);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: var(--space-sm);
+  box-shadow: 0 4px 12px rgba(4, 13, 26, 0.15);
 }
 
-.timelinePeriod {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  margin-bottom: 2px;
-}
-
-.timelineContent h4 {
+.eduDegree {
   font-size: 0.95rem;
   font-weight: 700;
   color: var(--primary);
-  margin-bottom: 2px;
+  margin-bottom: 0.3rem;
 }
 
-.timelineContent h5 {
+.eduInstitution {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.goldMedalTag {
+  display: inline-block;
+  margin-top: var(--space-sm);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  background: rgba(197, 160, 89, 0.08);
+  border: 1px solid rgba(197, 160, 89, 0.2);
+  padding: 0.25rem 0.7rem;
+  border-radius: 100px;
+}
+
+/* ══════════════════════════════════════════
+   SECTION 6: Career Timeline
+   ══════════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   SECTION 6: Career Timeline (Horizontal Scroll)
+   ══════════════════════════════════════════ */
+.scrollContainer {
+  position: relative;
+  /* Scroll length: 400vh allows enough scroll depth for comfortable horizontal reading */
+  height: 400vh;
+  margin-top: var(--space-xl);
+}
+
+.stickyTrack {
+  position: sticky;
+  top: 80px; /* offset for fixed header */
+  height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  padding: var(--space-lg) 0;
+}
+
+.timelineHeader {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto var(--space-md);
+  padding: 0 var(--space-md);
+  flex-shrink: 0;
+}
+
+.horizontalTrackWrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.horizontalTrack {
+  display: flex;
+  align-items: flex-start;
+  gap: 4rem; /* spacing between items */
+  padding: var(--space-xl) calc(50vw - 160px);
+  will-change: transform;
+  position: relative;
+  width: max-content; /* Ensure the flex container expands to full content width */
+}
+
+/* Central path running horizontally near the bottom of cards */
+.timelinePath {
+  position: absolute;
+  /* Align it horizontally with the timelineNode center (top of node = card height + connector height) */
+  bottom: calc(var(--space-md) + 12px); /* 12px is half of timelineNode height */
+  left: 50vw;
+  right: 50vw;
+  height: 3px;
+  background: rgba(27, 58, 107, 0.08);
+  z-index: 1;
+}
+
+.timelineProgress {
+  height: 100%;
+  background: linear-gradient(90deg, var(--secondary), var(--accent));
+  transition: width 0.1s ease-out;
+  width: 0%;
+}
+
+/* Individual timeline item container */
+.timelineItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  width: 320px;
+  flex-shrink: 0;
+}
+
+/* Card configuration in horizontal layout */
+.timelineCard {
+  width: 100%;
+  height: 180px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+  border: 1px solid rgba(4, 13, 26, 0.08);
+  border-radius: var(--radius-md);
+  padding: var(--space-md) var(--space-lg);
+  box-shadow: 0 4px 16px rgba(4, 13, 26, 0.04);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  position: relative;
+}
+
+.timelineCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(4, 13, 26, 0.1);
+  border-color: rgba(27, 58, 107, 0.15);
+}
+
+.timelineCardActive {
+  border-color: var(--secondary);
+  box-shadow: 0 4px 16px rgba(27, 58, 107, 0.1);
+}
+
+/* Connector line going down from card to horizontal path */
+.timelineConnector {
+  width: 2px;
+  height: 40px;
+  background: rgba(27, 58, 107, 0.08);
+  transition: background-color var(--transition-fast);
+}
+
+.timelineConnectorActive {
+  background: linear-gradient(to bottom, var(--secondary), var(--accent));
+}
+
+/* Node (the circle container) on the path */
+.timelineNode {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.timelineDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--bg-main);
+  border: 3px solid rgba(27, 58, 107, 0.2);
+  box-shadow: 0 0 0 2px rgba(27, 58, 107, 0.05);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.timelineDotActive {
+  background: var(--accent);
+  border-color: var(--bg-main);
+  box-shadow: 0 0 0 4px var(--accent);
+}
+
+.timelinePeriod {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.2rem;
+}
+
+.timelineRole {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.15rem;
+}
+
+.timelineInstitution {
   font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* On screens narrower than 768px, we make it a simple horizontal swipeable section */
+@media (max-width: 768px) {
+  .scrollContainer {
+    height: auto;
+    margin-top: var(--space-lg);
+  }
+
+  .stickyTrack {
+    position: relative;
+    top: 0;
+    height: auto;
+    padding: var(--space-md) 0;
+  }
+
+  .horizontalTrackWrapper {
+    overflow-x: auto;
+    scrollbar-width: none; /* Hide standard scrollbars */
+  }
+
+  .horizontalTrackWrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .horizontalTrack {
+    transform: none !important;
+    padding: var(--space-md) var(--space-md) var(--space-md) var(--space-md);
+    gap: var(--space-md);
+  }
+
+  .timelineItem {
+    width: 280px;
+  }
+
+  .timelineCard {
+    height: auto;
+    min-height: 160px;
+  }
+
+  .timelinePath,
+  .timelineConnector,
+  .timelineNode {
+    display: none;
+  }
+}
+
+/* ══════════════════════════════════════════
+   SECTION 7: Certificates Gallery
+   ══════════════════════════════════════════ */
+.certsSection {
+  margin-top: var(--space-xl);
+}
+
+.certsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+}
+
+@media (min-width: 640px) {
+  .certsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 992px) {
+  .certsGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.certCard {
+  background: var(--bg-card);
+  border: 1px solid rgba(4, 13, 26, 0.08);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.certCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(4, 13, 26, 0.1);
+  border-color: var(--secondary);
+}
+
+.certImageWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: var(--bg-soft);
+}
+
+.certImage {
+  object-fit: cover;
+  transition: transform var(--transition-normal);
+}
+
+.certCard:hover .certImage {
+  transform: scale(1.05);
+}
+
+.certOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 13, 26, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.certCard:hover .certOverlay {
+  opacity: 1;
+}
+
+.zoomSvg {
+  width: 2rem;
+  height: 2rem;
+  color: #ffffff;
+}
+
+.certMeta {
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(4, 13, 26, 0.06);
+  background: var(--bg-soft);
+}
+
+.certMeta span {
+  font-size: 0.7rem;
   font-weight: 500;
-  color: var(--text-main);
+  color: var(--text-muted);
+}
+
+.certIdx {
+  font-weight: 700 !important;
+  color: var(--secondary) !important;
+}
+
+/* ══════════════════════════════════════════
+   Lightbox
+   ══════════════════════════════════════════ */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 13, 26, 0.88);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  animation: lbFadeIn 0.25s ease forwards;
+}
+
+.lightboxContent {
+  position: relative;
+  background: var(--bg-card);
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  max-width: 900px;
+  width: 100%;
+  box-shadow: 0 40px 80px rgba(4, 13, 26, 0.4);
+  animation: lbScaleUp 0.3s ease forwards;
+}
+
+.lightboxClose {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 2.5rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.lightboxImageWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  max-height: 70vh;
+}
+
+.lightboxImage {
+  object-fit: contain;
+}
+
+@keyframes lbFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes lbScaleUp {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }

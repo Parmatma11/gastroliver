@@ -32,77 +32,11 @@ export const mainNavigation: NavigationItem[] = [
   },
   {
     label: "Diseases We Treat",
-    children: [
-      {
-        label: "Abdominal Pain",
-        path: "/abdomen-pain-treatment-in-delhi/"
-      },
-      {
-        label: "Acidity & Reflux",
-        path: "/acidity-and-reflux/"
-      },
-      {
-        label: "Diarrhoea & Constipation",
-        path: "/diarrhoea-constipation/"
-      },
-      {
-        label: "Intestinal Gas",
-        path: "/intestinal-gas-treatment/"
-      },
-      {
-        label: "GI Bleeding",
-        path: "/gastrointestinal-bleeding/"
-      },
-      {
-        label: "Liver Diseases",
-        path: "/liver-diseases-and-alcoholism/"
-      },
-      {
-        label: "Jaundice",
-        path: "/jaundice/"
-      },
-      {
-        label: "Piles / Hemorrhoids",
-        path: "/piles-hemorrhoids-bloody-stools/"
-      }
-    ]
+    path: "/conditions/"
   },
   {
     label: "Procedures & Facilities",
-    children: [
-      {
-        label: "UGI Endoscopy",
-        path: "/ugi-endoscopy/"
-      },
-      {
-        label: "Colonoscopy",
-        path: "/colonoscopy/"
-      },
-      {
-        label: "ERCP",
-        path: "/ercp/"
-      },
-      {
-        label: "Capsule Endoscopy",
-        path: "/capsule-endoscopy/"
-      },
-      {
-        label: "Manometry",
-        path: "/manometry-and-24-hour-ph-study/"
-      },
-      {
-        label: "Fibroscan",
-        path: "/fibroscan/"
-      },
-      {
-        label: "Liver Biopsy",
-        path: "/liver-biopsy/"
-      },
-      {
-        label: "POEM",
-        path: "/peroral-endoscopic-myotomy-poem/"
-      }
-    ]
+    path: "/procedures/"
   },
   {
     label: "Contact Us",

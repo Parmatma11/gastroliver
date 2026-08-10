@@ -75,23 +75,34 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: var(--space-sm);
 }
 
 .allocCard li {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: var(--text-main);
   display: flex;
-  align-items: center;
-  gap: 6px;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.45;
 }
 
-.allocCard li::before {
-  content: "•";
-  color: var(--secondary);
-  font-weight: bold;
-  font-size: 1.2rem;
+.checkIcon {
+  width: 1.15rem;
+  height: 1.15rem;
+  color: var(--accent);
+  flex-shrink: 0;
+  margin-top: 1px;
 }
+
+.hospIcon {
+  width: 1.15rem;
+  height: 1.15rem;
+  color: var(--secondary);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
 
 /* Hospital detail cards */
 .hospitalsGrid {
@@ -121,7 +132,14 @@
   .hospitalCard {
     grid-template-columns: 1fr 1.2fr;
   }
+  .reverseCard .imageContainer {
+    order: 2;
+  }
+  .reverseCard .hospContent {
+    order: 1;
+  }
 }
+
 
 .imageContainer {
   position: relative;
@@ -194,13 +212,25 @@
 }
 
 .servicesBlock li {
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   color: var(--text-main);
   background-color: var(--bg-soft);
   border: 1px solid var(--border);
-  padding: 6px 10px;
+  padding: 8px 12px;
   border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.3;
 }
+
+.checkBullet {
+  width: 1rem;
+  height: 1rem;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
 
 /* Bottom CTA block */
 .bottomCTA {

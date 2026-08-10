@@ -1,8 +1,16 @@
+'use client';
+
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { Testimonial } from '../../../types/content';
 import styles from './TestimonialCard.module.css';
 
 export default function TestimonialCard({ name, text, rating, avatar }: Testimonial) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const isLongText = text.length > 220;
+  const displayText = isLongText && !isExpanded ? `${text.substring(0, 220)}...` : text;
+
   return (
     <div className={styles.card}>
       <div className={styles.rating}>
@@ -19,7 +27,16 @@ export default function TestimonialCard({ name, text, rating, avatar }: Testimon
         ))}
       </div>
       <blockquote className={styles.quote}>
-        <p>&ldquo;{text}&rdquo;</p>
+        <p>&ldquo;{displayText}&rdquo;</p>
+        {isLongText && (
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className={styles.readMoreBtn}
+            aria-expanded={isExpanded}
+          >
+            {isExpanded ? 'Show Less' : 'Read Full Testimonial'}
+          </button>
+        )}
       </blockquote>
       <div className={styles.author}>
         <div className={styles.avatarWrapper}>
@@ -39,3 +56,4 @@ export default function TestimonialCard({ name, text, rating, avatar }: Testimon
     </div>
   );
 }
+

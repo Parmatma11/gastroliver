@@ -6,40 +6,59 @@ import Image from 'next/image';
 import PageHero from '../../components/layout/PageHero';
 import Button from '../../components/ui/Button';
 import ScrollReveal from '../../components/ui/ScrollReveal';
-import { blogData } from '../../../data/blog';
+import { proceduresData } from '../../../data/procedures';
 import styles from './page.module.css';
 
-export default function BlogIndexPage() {
-  const [activeSeries, setActiveSeries] = useState<string>('all');
+export default function ProceduresIndexPage() {
+  const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   
   // Modal states
-  const [selectedPost, setSelectedPost] = useState<typeof blogData[0] | null>(null);
+  const [selectedProcedure, setSelectedProcedure] = useState<typeof proceduresData[0] | null>(null);
   const [modalContent, setModalContent] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const breadcrumbs = [
     { label: 'Home', path: '/' },
-    { label: 'Blog' }
+    { label: 'Procedures & Facilities' }
   ];
 
-  const seriesNames: Record<string, string> = {
-    'all': 'All Articles',
-    'general': 'General GI Health',
-    'fatty-liver': 'Fatty Liver Series',
-    'acid-reflux': 'Acid Reflux Series',
-    'weight-loss': 'Weight Loss Program',
+  const categories = [
+    { key: 'all', label: 'All Procedures' },
+    { key: 'endoscopy', label: 'Endoscopy & EUS' },
+    { key: 'liver', label: 'Liver Diagnostics' },
+    { key: 'special', label: 'Special GI Procedures' }
+  ];
+
+  // Map slug to category key
+  const getProcedureCategory = (slug: string): string => {
+    const endoscopySlugs = [
+      'ugi-endoscopy', 'colonoscopy', 'ercp', 'capsule-endoscopy', 
+      'peroral-endoscopic-myotomy-poem', 'endoscopic-ultrasonography', 
+      'double-balloon-enteroscopy-capsule-endoscopy'
+    ];
+    const liverSlugs = ['fibroscan', 'liver-biopsy'];
+
+    if (endoscopySlugs.includes(slug)) return 'endoscopy';
+    if (liverSlugs.includes(slug)) return 'liver';
+    return 'special';
   };
 
-  // Fetch blog details for modal on card click
-  const handleCardClick = (post: typeof blogData[0]) => {
-    setSelectedPost(post);
+  const getCategoryLabel = (slug: string): string => {
+    const catKey = getProcedureCategory(slug);
+    const cat = categories.find(c => c.key === catKey);
+    return cat ? cat.label : 'Diagnostics';
+  };
+
+  // Fetch procedure details on card click
+  const handleCardClick = (procedure: typeof proceduresData[0]) => {
+    setSelectedProcedure(procedure);
     setLoading(true);
     setError(null);
     setModalContent('');
 
-    fetch(`/api/blog/${post.slug}/`)
+    fetch(`/api/procedures/${procedure.slug}/`)
       .then(res => {
         if (!res.ok) {
           throw new Error('Failed to fetch details');
@@ -60,14 +79,14 @@ export default function BlogIndexPage() {
 
   // Handle modal closing
   const closeModal = () => {
-    setSelectedPost(null);
+    setSelectedProcedure(null);
     setModalContent('');
     setError(null);
   };
 
   // Prevent background scrolling when modal is open
   useEffect(() => {
-    if (selectedPost) {
+    if (selectedProcedure) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -75,7 +94,7 @@ export default function BlogIndexPage() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [selectedPost]);
+  }, [selectedProcedure]);
 
   const handleBookClick = () => {
     closeModal();
@@ -84,19 +103,19 @@ export default function BlogIndexPage() {
     window.dispatchEvent(event);
   };
 
-  // Filter posts list
-  const filteredPosts = blogData.filter(post => {
-    const matchesSeries = activeSeries === 'all' || post.series === activeSeries;
-    const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          post.metaDescription.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesSeries && matchesSearch;
+  // Filter procedures list
+  const filteredProcedures = proceduresData.filter(p => {
+    const matchesCategory = activeCategory === 'all' || getProcedureCategory(p.slug) === activeCategory;
+    const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          p.metaDescription.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
   });
 
   return (
     <main className={styles.container}>
       <PageHero
-        title="Medical Articles & Insights"
-        subtitle="Professional gastrointestinal health updates, diet charts, and liver care guidelines"
+        title="Procedures & Facilities"
+        subtitle="Advanced diagnostic endoscopy, liver screening, and therapeutic GI procedures"
         breadcrumbs={breadcrumbs}
         bannerImage="/images/clinic/hslider4.jpg"
       />
@@ -105,13 +124,13 @@ export default function BlogIndexPage() {
         {/* Filters and Search Bar Row */}
         <div className={styles.searchBarRow}>
           <div className={styles.filterBar}>
-            {Object.entries(seriesNames).map(([key, label], idx) => (
+            {categories.map((cat) => (
               <button
-                key={idx}
-                className={`${styles.filterBtn} ${activeSeries === key ? styles.active : ''}`}
-                onClick={() => setActiveSeries(key)}
+                key={cat.key}
+                className={`${styles.filterBtn} ${activeCategory === cat.key ? styles.active : ''}`}
+                onClick={() => setActiveCategory(cat.key)}
               >
-                {label} ({key === 'all' ? blogData.length : blogData.filter(b => b.series === key).length})
+                {cat.label}
               </button>
             ))}
           </div>
@@ -123,45 +142,43 @@ export default function BlogIndexPage() {
             <input
               type="text"
               className={styles.searchInput}
-              placeholder="Search articles..."
+              placeholder="Search GI procedures..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
         </div>
 
-        {/* Blog Post Cards Grid */}
-        {filteredPosts.length > 0 ? (
+        {/* Dynamic Cards Grid */}
+        {filteredProcedures.length > 0 ? (
           <div className={styles.grid}>
-            {filteredPosts.map((post, idx) => (
-              <ScrollReveal key={post.slug} direction="up" delay={idx * 30 + 50}>
-                <article className={styles.card} onClick={() => handleCardClick(post)}>
-                  {post.featuredImage && (
+            {filteredProcedures.map((p, idx) => (
+              <ScrollReveal key={p.slug} direction="up" delay={idx * 30 + 50}>
+                <article className={styles.card} onClick={() => handleCardClick(p)}>
+                  {p.sideImage && (
                     <div className={styles.cardImageWrapper}>
                       <Image
-                        src={post.featuredImage}
-                        alt={post.title}
+                        src={p.sideImage}
+                        alt={p.title}
                         fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 300px"
                         className={styles.cardImg}
-                        loading={idx < 6 ? "eager" : "lazy"}
                       />
                       <span className={styles.cardBadge}>
-                        {post.series ? (seriesNames[post.series] || post.series) : "General"}
+                        {getCategoryLabel(p.slug)}
                       </span>
                     </div>
                   )}
                   <div className={styles.cardContent}>
-                    {!post.featuredImage && (
+                    {!p.sideImage && (
                       <span className={styles.cardBadgeInline}>
-                        {post.series ? (seriesNames[post.series] || post.series) : "General"}
+                        {getCategoryLabel(p.slug)}
                       </span>
                     )}
-                    <span className={styles.cardDate}>{post.publishedDate}</span>
-                    <h2 className={styles.cardTitle}>{post.title}</h2>
-                    <p className={styles.cardExcerpt}>{post.metaDescription}</p>
+                    <h2 className={styles.cardTitle}>{p.title}</h2>
+                    <p className={styles.cardExcerpt}>{p.metaDescription}</p>
                     <button className={styles.viewBtn}>
-                      <span>Read Article Preview</span>
+                      <span>Explore Procedure</span>
                       <svg className={styles.arrow} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                       </svg>
@@ -173,9 +190,9 @@ export default function BlogIndexPage() {
           </div>
         ) : (
           <div className={styles.noResults}>
-            <h3>No Articles Found</h3>
-            <p>We couldn&apos;t find any medical articles matching &ldquo;{searchQuery}&rdquo;. Try revising filters or search terms.</p>
-            <button onClick={() => { setSearchQuery(''); setActiveSeries('all'); }} className={styles.resetBtn}>
+            <h3>No Procedures Found</h3>
+            <p>We couldn&apos;t find any results matching &ldquo;{searchQuery}&rdquo;. Try revising filters or search terms.</p>
+            <button onClick={() => { setSearchQuery(''); setActiveCategory('all'); }} className={styles.resetBtn}>
               Reset Filters
             </button>
           </div>
@@ -183,17 +200,14 @@ export default function BlogIndexPage() {
       </section>
 
       {/* Dynamic Detail Modal (Big Card Overlay) */}
-      {selectedPost && (
+      {selectedProcedure && (
         <div className={styles.modalOverlay} onClick={closeModal}>
           <div className={styles.modalCard} onClick={(e) => e.stopPropagation()}>
             {/* Modal Header */}
             <div className={styles.modalHeader}>
               <div className={styles.modalHeaderTitle}>
-                <span className={styles.modalBadge}>
-                  {selectedPost.series ? (seriesNames[selectedPost.series] || selectedPost.series) : "General"}
-                </span>
-                <span className={styles.modalDate}>{selectedPost.publishedDate}</span>
-                <h2>{selectedPost.title}</h2>
+                <span className={styles.modalBadge}>{getCategoryLabel(selectedProcedure.slug)}</span>
+                <h2>{selectedProcedure.title}</h2>
               </div>
               <button className={styles.closeBtn} onClick={closeModal} aria-label="Close Modal">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className={styles.closeIcon}>
@@ -207,7 +221,7 @@ export default function BlogIndexPage() {
               {loading && (
                 <div className={styles.loaderWrapper}>
                   <div className={styles.spinner} />
-                  <p>Fetching article details...</p>
+                  <p>Fetching procedure details...</p>
                 </div>
               )}
 
@@ -230,7 +244,7 @@ export default function BlogIndexPage() {
               <Button variant="primary" size="md" onClick={handleBookClick}>
                 Book Consultation
               </Button>
-              <Link href={`/blog/${selectedPost.slug}/`} className={styles.fullPageLink} onClick={closeModal}>
+              <Link href={`/procedures/${selectedProcedure.slug}/`} className={styles.fullPageLink} onClick={closeModal}>
                 Read Standalone Article &rarr;
               </Link>
             </div>

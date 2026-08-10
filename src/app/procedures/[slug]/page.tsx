@@ -6,10 +6,10 @@ import Link from 'next/link';
 import { proceduresData } from '../../../../data/procedures';
 import { diseasesData } from '../../../../data/diseases';
 import { contactData } from '../../../../data/contact';
-import { parseMarkdownToHtml } from '../../../lib/markdown';
 import PageHero from '../../../components/layout/PageHero';
 import Button from '../../../components/ui/Button';
 import styles from './page.module.css';
+
 
 interface PageProps {
   params: Promise<{
@@ -39,6 +39,50 @@ export async function generateStaticParams() {
   }));
 }
 
+import { parseContentToSections, MarkdownSection } from '../../../lib/sectionParser';
+import StickyNav from '../../../components/ui/StickyNav';
+import ScrollReveal from '../../../components/ui/ScrollReveal';
+
+
+// Helper: strip table of contents from markdown before rendering
+function stripTableOfContents(markdown: string): string {
+  if (!markdown) return "";
+  
+  const lines = markdown.split('\n');
+  const resultLines: string[] = [];
+  let inToc = false;
+  
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+    
+    // Detect Table of Contents header
+    if (trimmed.toLowerCase() === 'table of contents') {
+      inToc = true;
+      continue;
+    }
+    
+    if (inToc) {
+      // Skip empty lines, Toggle button lines, and list items representing links
+      if (trimmed === '' || 
+          trimmed.includes('[Toggle') || 
+          trimmed.includes('](#)') || 
+          trimmed.startsWith('- [') || 
+          trimmed.startsWith('* [') ||
+          (trimmed.startsWith('-') && trimmed.includes('](#'))) {
+        continue;
+      }
+      
+      // End of TOC block
+      inToc = false;
+    }
+    
+    resultLines.push(line);
+  }
+  
+  return resultLines.join('\n');
+}
+
 export default async function ProcedurePage({ params }: PageProps) {
   const { slug } = await params;
   const procedure = proceduresData.find(p => p.slug === slug);
@@ -48,15 +92,23 @@ export default async function ProcedurePage({ params }: PageProps) {
 
   // Load content file
   const filePath = path.join(process.cwd(), 'content', 'procedures', `${slug}.md`);
-  let contentHtml = "";
   let rawContent = "";
+  let sections: MarkdownSection[] = [];
 
   if (fs.existsSync(filePath)) {
     rawContent = fs.readFileSync(filePath, 'utf8');
-    contentHtml = parseMarkdownToHtml(rawContent);
+    const cleanedContent = stripTableOfContents(rawContent);
+    sections = parseContentToSections(cleanedContent);
   } else {
     // Fallback description
-    contentHtml = `<p>${procedure.metaDescription}</p><p>(Procedure details are currently being audited and will be updated shortly.)</p>`;
+    sections = [{
+      title: procedure.title,
+      cleanTitle: "Overview",
+      id: "overview",
+      level: 1,
+      contentHtml: `<p>${procedure.metaDescription}</p><p>(Procedure details are currently being audited and will be updated shortly.)</p>`,
+      rawMarkdown: ""
+    }];
   }
 
   const breadcrumbs = [
@@ -66,8 +118,17 @@ export default async function ProcedurePage({ params }: PageProps) {
   ];
 
   // Helper: Get related diseases for the sidebar
-  // (We show some general gastro diseases related to endoscopy/biliary evaluation)
   const sidebarDiseases = diseasesData.slice(0, 6);
+
+  // Extract sections
+  const introSection = sections.find(s => s.level === 1) || sections[0];
+  const bodySections = sections.filter(s => s !== introSection);
+
+  // Setup sticky nav sections list
+  const navItems = [
+    { id: introSection.id, title: 'Overview' },
+    ...bodySections.map(sec => ({ id: sec.id, title: sec.cleanTitle }))
+  ];
 
   return (
     <article className={styles.container}>
@@ -79,29 +140,54 @@ export default async function ProcedurePage({ params }: PageProps) {
       />
 
       <div className={`container ${styles.contentWrapper}`}>
+        {/* Left Column: Section Navigation */}
+        <aside className={styles.navColumn}>
+          <StickyNav sections={navItems} />
+        </aside>
+
+        {/* Center Column: Content Body */}
         <div className={styles.mainColumn}>
-          {/* Main Content Body */}
-          <div 
-            className={styles.articleBody}
-            dangerouslySetInnerHTML={{ __html: contentHtml }}
-          />
+          {/* Intro Section */}
+          <ScrollReveal direction="up" delay={50}>
+            <section id={introSection.id} className={styles.contentSection}>
+              <div 
+                className={styles.sectionBody}
+                dangerouslySetInnerHTML={{ __html: introSection.contentHtml }}
+              />
+            </section>
+          </ScrollReveal>
+
+          {/* Render remaining body sections dynamically */}
+          {bodySections.map((sec, idx) => (
+            <ScrollReveal key={idx} direction="up" delay={50}>
+              <section id={sec.id} className={styles.contentSection}>
+                <h2 className={styles.sectionHeading}>{sec.cleanTitle}</h2>
+                <div 
+                  className={styles.sectionBody}
+                  dangerouslySetInnerHTML={{ __html: sec.contentHtml }}
+                />
+              </section>
+            </ScrollReveal>
+          ))}
 
           {/* Appointment Callout Box */}
-          <div className={styles.contentCTA}>
-            <h3>Need to Schedule this Procedure?</h3>
-            <p>Dr. Ankita Gupta performs diagnostic and therapeutic endoscopies at advanced tertiary care centers in South Delhi.</p>
-            <div className={styles.ctaActions}>
-              <Button variant="secondary" href="#appointment-modal">
-                Book Procedure Consultation
-              </Button>
-              <a href={`tel:${contactData.phone.replace(/\s+/g, '')}`} className={styles.phoneLink}>
-                Call: {contactData.phone}
-              </a>
+          <ScrollReveal direction="up" delay={50}>
+            <div className={styles.contentCTA}>
+              <h3>Need to Schedule this Procedure?</h3>
+              <p>Dr. Ankita Gupta performs diagnostic and therapeutic endoscopies at advanced tertiary care centers in South Delhi.</p>
+              <div className={styles.ctaActions}>
+                <Button variant="secondary" href="#appointment-modal">
+                  Book Procedure Consultation
+                </Button>
+                <a href={`tel:${contactData.phone.replace(/\s+/g, '')}`} className={styles.phoneLink}>
+                  Call: {contactData.phone}
+                </a>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
 
-        {/* Sidebar */}
+        {/* Right Column: Sidebar */}
         <aside className={styles.sidebar}>
           {/* Conditions Treated widget */}
           <div className={styles.widget}>
@@ -157,6 +243,7 @@ export default async function ProcedurePage({ params }: PageProps) {
           </div>
         </aside>
       </div>
+
 
       {/* Structured Data: Breadcrumb and MedicalProcedure Schema */}
       <script

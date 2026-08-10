@@ -25,7 +25,7 @@
   flex-direction: column;
   overflow: hidden;
   animation: scaleUp var(--transition-normal) forwards;
-  border: 1px solid rgba(0, 242, 254, 0.18);
+  border: 1px solid rgba(27, 58, 107, 0.18);
 }
 
 /* Header styling */

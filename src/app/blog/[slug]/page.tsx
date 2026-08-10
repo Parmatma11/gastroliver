@@ -8,7 +8,10 @@ import { blogData } from '../../../../data/blog';
 import { parseMarkdownToHtml } from '../../../lib/markdown';
 import PageHero from '../../../components/layout/PageHero';
 import DoctorProfileSnippet from '../../../components/ui/DoctorProfileSnippet';
+import ReadingProgressBar from '../../../components/ui/ReadingProgressBar';
+import ScrollReveal from '../../../components/ui/ScrollReveal';
 import styles from './page.module.css';
+
 
 interface PageProps {
   params: Promise<{
@@ -114,8 +117,11 @@ export default async function BlogPostPage({ params }: PageProps) {
     'weight-loss': 'Weight Loss Program',
   };
 
+
   return (
     <article className={styles.container}>
+      <ReadingProgressBar />
+      
       <PageHero
         title={post.title}
         subtitle={`${post.publishedDate} • By ${post.author} • ${post.readTime} Read`}
@@ -127,32 +133,39 @@ export default async function BlogPostPage({ params }: PageProps) {
         <div className={styles.mainColumn}>
           {/* Featured Image if available */}
           {post.featuredImage && (
-            <div className={styles.imageContainer}>
-              <Image
-                src={post.featuredImage}
-                alt={post.title}
-                fill
-                sizes="(max-width: 768px) 100vw, 800px"
-                className={styles.featuredImage}
-                priority
-              />
-            </div>
+            <ScrollReveal direction="up" delay={50}>
+              <div className={styles.imageContainer}>
+                <Image
+                  src={post.featuredImage}
+                  alt={post.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 800px"
+                  className={styles.featuredImage}
+                  priority
+                />
+              </div>
+            </ScrollReveal>
           )}
 
           {/* Article Text Content */}
-          <div 
-            className={styles.articleBody}
-            dangerouslySetInnerHTML={{ __html: contentHtml }}
-          />
+          <ScrollReveal direction="up" delay={100}>
+            <div 
+              className={styles.articleBody}
+              dangerouslySetInnerHTML={{ __html: contentHtml }}
+            />
+          </ScrollReveal>
 
           {/* Share/Footer Widget */}
-          <div className={styles.articleFooter}>
-            <div className={styles.tags}>
-              <span className={styles.tagLabel}>Series:</span>
-              <span className={styles.tagValue}>{post.series ? (seriesNames[post.series] || post.series) : "General"}</span>
+          <ScrollReveal direction="up" delay={50}>
+            <div className={styles.articleFooter}>
+              <div className={styles.tags}>
+                <span className={styles.tagLabel}>Series:</span>
+                <span className={styles.tagValue}>{post.series ? (seriesNames[post.series] || post.series) : "General"}</span>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
+
 
         {/* Sidebar */}
         <aside className={styles.sidebar}>

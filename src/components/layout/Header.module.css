@@ -16,7 +16,7 @@
   width: 92%;
   max-width: 1100px;
   border-radius: 99px;
-  border: 1px solid rgba(0, 242, 254, 0.18);
+  border: 1px solid rgba(27, 58, 107, 0.18);
   box-shadow: var(--shadow-premium);
   background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(20px);
@@ -184,7 +184,7 @@
 
 .link, .dropdownTrigger {
   color: var(--primary);
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: 500;
   padding: 0.5rem 0;
   position: relative;
@@ -266,7 +266,7 @@
 .dropdownLink {
   display: block;
   padding: 0.5rem var(--space-md);
-  font-size: 0.9rem;
+  font-size: 0.825rem;
   color: var(--text-main);
   transition: all var(--transition-fast);
 }

@@ -47,7 +47,7 @@
 .slideOverlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 80% 50%, rgba(0, 242, 254, 0.12) 0%, rgba(4, 13, 26, 0.85) 100%);
+  background: radial-gradient(circle at 80% 50%, rgba(27, 58, 107, 0.12) 0%, rgba(4, 13, 26, 0.85) 100%);
   z-index: 1;
 }
 

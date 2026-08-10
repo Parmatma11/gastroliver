@@ -18,7 +18,7 @@
 
 .pointCard {
   background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(0, 242, 254, 0.08);
+  border: 1px solid rgba(27, 58, 107, 0.08);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: var(--radius-sm);
@@ -32,7 +32,7 @@
 .pointCard:hover {
   background: rgba(255, 255, 255, 0.05);
   border-color: var(--secondary);
-  box-shadow: 0 15px 40px -10px rgba(0, 242, 254, 0.18);
+  box-shadow: 0 15px 40px -10px rgba(27, 58, 107, 0.18);
   transform: translateY(-5px);
 }
 
@@ -45,7 +45,7 @@
   font-size: 0.95rem;
   font-weight: 700;
   color: var(--secondary);
-  text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+  text-shadow: 0 0 10px rgba(27, 58, 107, 0.3);
   letter-spacing: 0.1em;
 }
 

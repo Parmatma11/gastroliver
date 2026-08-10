@@ -6,9 +6,11 @@ import Link from 'next/link';
 import { diseasesData } from '../../../../data/diseases';
 import { proceduresData } from '../../../../data/procedures';
 import { contactData } from '../../../../data/contact';
-import { parseMarkdownToHtml } from '../../../lib/markdown';
 import PageHero from '../../../components/layout/PageHero';
 import Button from '../../../components/ui/Button';
+import StickyNav from '../../../components/ui/StickyNav';
+import ScrollReveal from '../../../components/ui/ScrollReveal';
+import { parseContentToSections, MarkdownSection } from '../../../lib/sectionParser';
 import styles from './page.module.css';
 
 interface PageProps {
@@ -86,17 +88,25 @@ export default async function DiseasePage({ params }: PageProps) {
 
   // Load content file
   const filePath = path.join(process.cwd(), 'content', 'diseases', `${slug}.md`);
-  let contentHtml = "";
   let rawContent = "";
+  let sections: MarkdownSection[] = [];
 
   if (fs.existsSync(filePath)) {
     rawContent = fs.readFileSync(filePath, 'utf8');
     const cleanedContent = stripTableOfContents(rawContent);
-    contentHtml = parseMarkdownToHtml(cleanedContent);
+    sections = parseContentToSections(cleanedContent);
   } else {
     // Fallback if content file hasn't been written
-    contentHtml = `<p>${disease.metaDescription}</p><p>(Medical details for this condition are currently being audited and will be updated shortly.)</p>`;
+    sections = [{
+      title: disease.title,
+      cleanTitle: "Overview",
+      id: "overview",
+      level: 1,
+      contentHtml: `<p>${disease.metaDescription}</p><p>(Medical details for this condition are currently being audited and will be updated shortly.)</p>`,
+      rawMarkdown: ""
+    }];
   }
+
 
   const breadcrumbs = [
     { label: 'Home', path: '/' },
@@ -106,6 +116,16 @@ export default async function DiseasePage({ params }: PageProps) {
 
   // Quick list of 5 procedures for sidebar
   const sidebarProcedures = proceduresData.slice(0, 5);
+
+  // Extract sections
+  const introSection = sections.find(s => s.level === 1) || sections[0];
+  const bodySections = sections.filter(s => s !== introSection);
+
+  // Setup vertical sticky nav sections list
+  const navItems = [
+    { id: introSection.id, title: 'Overview' },
+    ...bodySections.map(sec => ({ id: sec.id, title: sec.cleanTitle }))
+  ];
 
   return (
     <article className={styles.container}>
@@ -117,29 +137,54 @@ export default async function DiseasePage({ params }: PageProps) {
       />
 
       <div className={`container ${styles.contentWrapper}`}>
+        {/* Left Column: Section Navigation */}
+        <aside className={styles.navColumn}>
+          <StickyNav sections={navItems} />
+        </aside>
+
+        {/* Center Column: Sections Content */}
         <div className={styles.mainColumn}>
-          {/* Main article content */}
-          <div 
-            className={styles.articleBody}
-            dangerouslySetInnerHTML={{ __html: contentHtml }}
-          />
+          {/* Main article intro content */}
+          <ScrollReveal direction="up" delay={50}>
+            <section id={introSection.id} className={styles.contentSection}>
+              <div 
+                className={styles.sectionBody}
+                dangerouslySetInnerHTML={{ __html: introSection.contentHtml }}
+              />
+            </section>
+          </ScrollReveal>
+
+          {/* Render remaining body sections dynamically */}
+          {bodySections.map((sec, idx) => (
+            <ScrollReveal key={idx} direction="up" delay={50}>
+              <section id={sec.id} className={styles.contentSection}>
+                <h2 className={styles.sectionHeading}>{sec.cleanTitle}</h2>
+                <div 
+                  className={styles.sectionBody}
+                  dangerouslySetInnerHTML={{ __html: sec.contentHtml }}
+                />
+              </section>
+            </ScrollReveal>
+          ))}
 
           {/* Quick Consultation CTA Block */}
-          <div className={styles.contentCTA}>
-            <h3>Need Clinical Advice?</h3>
-            <p>Schedule a clinic visit with Dr. Ankita Gupta at Gastro Liver Endoscopy Centre in Greater Kailash, South Delhi.</p>
-            <div className={styles.ctaActions}>
-              <Button variant="secondary" size="md" href="#appointment-modal">
-                Book Clinic Appointment
-              </Button>
-              <a href={`tel:${contactData.phone.replace(/\s+/g, '')}`} className={styles.phoneLink}>
-                Call: {contactData.phone}
-              </a>
+          <ScrollReveal direction="up" delay={50}>
+            <div className={styles.contentCTA}>
+              <h3>Need Clinical Advice?</h3>
+              <p>Schedule a clinic visit with Dr. Ankita Gupta at Gastro Liver Endoscopy Centre in Greater Kailash, South Delhi.</p>
+              <div className={styles.ctaActions}>
+                <Button variant="secondary" size="md" href="#appointment-modal">
+                  Book Clinic Appointment
+                </Button>
+                <a href={`tel:${contactData.phone.replace(/\s+/g, '')}`} className={styles.phoneLink}>
+                  Call: {contactData.phone}
+                </a>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
 
-        {/* Sidebar */}
+        {/* Right Column: Sidebar */}
         <aside className={styles.sidebar}>
           {/* Procedures Menu widget */}
           <div className={styles.widget}>
@@ -195,6 +240,7 @@ export default async function DiseasePage({ params }: PageProps) {
           </div>
         </aside>
       </div>
+
 
       {/* Structured Data: Breadcrumb and MedicalCondition Schema */}
       <script

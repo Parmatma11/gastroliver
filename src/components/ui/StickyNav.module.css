@@ -1,0 +1,115 @@
+.navContainer {
+  width: 100%;
+}
+
+/* Mobile View: Horizontal Scroll Bar */
+.mobileScrollMenu {
+  display: flex;
+  gap: var(--space-xs);
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: var(--space-xs) 0 var(--space-sm) 0;
+  margin-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border);
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  -ms-overflow-style: none; /* Hide scrollbar for IE */
+}
+
+.mobileScrollMenu::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Safari/Chrome */
+}
+
+.mobileLink {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 0.825rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  background-color: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+}
+
+.activeMobile {
+  background-color: var(--secondary);
+  border-color: var(--secondary);
+  color: var(--primary);
+  box-shadow: 0 4px 10px rgba(27, 58, 107, 0.15);
+}
+
+/* Desktop View: Vertical Left Menu */
+.desktopMenu {
+  display: none;
+}
+
+.navTitle {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: var(--space-md);
+}
+
+.navList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.desktopLink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+  padding: 4px 0;
+}
+
+.indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--border-focus);
+  opacity: 0.2;
+  transition: all var(--transition-fast);
+}
+
+.desktopLink:hover {
+  color: var(--primary);
+}
+
+.desktopLink:hover .indicator {
+  opacity: 0.6;
+  transform: scale(1.3);
+}
+
+.activeDesktop {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.activeDesktop .indicator {
+  opacity: 1;
+  background-color: var(--accent);
+  transform: scale(1.5);
+  box-shadow: 0 0 8px var(--accent);
+}
+
+/* Breakpoint for Desktop Sticky Nav */
+@media (min-width: 992px) {
+  .mobileScrollMenu {
+    display: none;
+  }
+  .desktopMenu {
+    display: block;
+    position: sticky;
+    top: 100px; /* Accounts for fixed navbar spacing */
+  }
+}

@@ -68,3 +68,24 @@
   font-size: 0.75rem;
   color: var(--text-muted);
 }
+
+.readMoreBtn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-family: var(--font-sans), sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 0.5rem;
+  display: inline-block;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--transition-fast);
+}
+
+.readMoreBtn:hover {
+  color: var(--secondary);
+}
+

@@ -4,10 +4,12 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { galleryData } from '../../../data/gallery';
 import PageHero from '../../components/layout/PageHero';
+import ScrollReveal from '../ui/ScrollReveal';
 import styles from '../../app/gallery/page.module.css';
 
 export default function GalleryPageContent() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const breadcrumbs = [
@@ -20,6 +22,33 @@ export default function GalleryPageContent() {
     { id: 'all', name: 'All Categories' },
     ...galleryData.map(cat => ({ id: cat.id, name: cat.name }))
   ];
+
+  // Get all unique images across all categories to calculate 'all' count
+  const allUniqueImages: string[] = [];
+  galleryData.forEach(cat => {
+    cat.images.forEach(img => {
+      if (!allUniqueImages.includes(img.src)) {
+        allUniqueImages.push(img.src);
+      }
+    });
+  });
+  const totalUniqueImagesCount = allUniqueImages.length;
+
+  const getCategoryCount = (categoryId: string) => {
+    if (categoryId === 'all') {
+      return totalUniqueImagesCount;
+    }
+    const cat = galleryData.find(c => c.id === categoryId);
+    if (!cat) return 0;
+    
+    const uniqueInCat: string[] = [];
+    cat.images.forEach(img => {
+      if (!uniqueInCat.includes(img.src)) {
+        uniqueInCat.push(img.src);
+      }
+    });
+    return uniqueInCat.length;
+  };
 
   // Get active images based on filter
   const activeImages: { src: string; alt: string; categoryName: string }[] = [];
@@ -39,17 +68,24 @@ export default function GalleryPageContent() {
     }
   });
 
+  // Filter active images by search query
+  const filteredImages = activeImages.filter(img => {
+    const matchesSearch = img.alt.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          img.categoryName.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesSearch;
+  });
+
   const handleNext = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (lightboxIndex !== null) {
-      setLightboxIndex((lightboxIndex + 1) % activeImages.length);
+      setLightboxIndex((lightboxIndex + 1) % filteredImages.length);
     }
   };
 
   const handlePrev = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (lightboxIndex !== null) {
-      setLightboxIndex((lightboxIndex - 1 + activeImages.length) % activeImages.length);
+      setLightboxIndex((lightboxIndex - 1 + filteredImages.length) % filteredImages.length);
     }
   };
 
@@ -63,46 +99,72 @@ export default function GalleryPageContent() {
       />
 
       <section className={`container ${styles.wrapper}`}>
-        {/* Category Filter Pills */}
-        <div className={styles.filterBar}>
-          {categories.map((cat, idx) => (
-            <button
-              key={idx}
-              className={`${styles.filterBtn} ${selectedCategory === cat.id ? styles.active : ''}`}
-              onClick={() => setSelectedCategory(cat.id)}
-            >
-              {cat.name}
-            </button>
-          ))}
+        {/* Filters and Search Bar Row (identical to blog page UI) */}
+        <div className={styles.searchBarRow}>
+          <div className={styles.filterBar}>
+            {categories.map((cat, idx) => (
+              <button
+                key={idx}
+                className={`${styles.filterBtn} ${selectedCategory === cat.id ? styles.active : ''}`}
+                onClick={() => setSelectedCategory(cat.id)}
+              >
+                {cat.name} ({getCategoryCount(cat.id)})
+              </button>
+            ))}
+          </div>
+
+          <div className={styles.searchContainer}>
+            <svg className={styles.searchIcon} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.604 10.604z" />
+            </svg>
+            <input
+              type="text"
+              className={styles.searchInput}
+              placeholder="Search images..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
         </div>
 
         {/* Gallery Grid */}
-        <div className={styles.grid}>
-          {activeImages.map((img, idx) => (
-            <div
-              key={idx}
-              className={styles.card}
-              onClick={() => setLightboxIndex(idx)}
-            >
-              <div className={styles.imageWrapper}>
-                <Image
-                  src={img.src}
-                  alt={img.alt}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 300px"
-                  className={styles.image}
-                />
-                <div className={styles.overlay}>
-                  <span className={styles.catLabel}>{img.categoryName}</span>
-                  <p className={styles.zoomText}>Click to Zoom</p>
+        {filteredImages.length > 0 ? (
+          <div className={styles.grid}>
+            {filteredImages.map((img, idx) => (
+              <ScrollReveal key={`${img.src}-${idx}`} direction="up" delay={idx * 30 + 50}>
+                <div
+                  className={styles.card}
+                  onClick={() => setLightboxIndex(idx)}
+                >
+                  <div className={styles.imageWrapper}>
+                    <Image
+                      src={img.src}
+                      alt={img.alt}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 300px"
+                      className={styles.image}
+                    />
+                    <div className={styles.overlay}>
+                      <span className={styles.catLabel}>{img.categoryName}</span>
+                      <p className={styles.zoomText}>Click to Zoom</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
-        </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        ) : (
+          <div className={styles.noResults}>
+            <h3>No Images Found</h3>
+            <p>We couldn&apos;t find any gallery images matching &ldquo;{searchQuery}&rdquo;. Try revising your filters or search terms.</p>
+            <button onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }} className={styles.resetBtn}>
+              Reset Filters
+            </button>
+          </div>
+        )}
 
         {/* Inline Lightbox Zoom Modal */}
-        {lightboxIndex !== null && (
+        {lightboxIndex !== null && filteredImages[lightboxIndex] && (
           <div className={styles.lightbox} onClick={() => setLightboxIndex(null)}>
             <div className={styles.lightboxContent} onClick={(e) => e.stopPropagation()}>
               <button 
@@ -123,8 +185,8 @@ export default function GalleryPageContent() {
               
               <div className={styles.lightboxImageWrapper}>
                 <Image
-                  src={activeImages[lightboxIndex].src}
-                  alt={activeImages[lightboxIndex].alt}
+                  src={filteredImages[lightboxIndex].src}
+                  alt={filteredImages[lightboxIndex].alt}
                   fill
                   className={styles.lightboxImage}
                   priority
@@ -140,8 +202,8 @@ export default function GalleryPageContent() {
               </button>
 
               <div className={styles.lightboxCaption}>
-                <span>{activeImages[lightboxIndex].categoryName}</span>
-                <p>{activeImages[lightboxIndex].alt}</p>
+                <span>{filteredImages[lightboxIndex].categoryName}</span>
+                <p>{filteredImages[lightboxIndex].alt}</p>
               </div>
             </div>
           </div>

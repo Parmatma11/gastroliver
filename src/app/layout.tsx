@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { inter, playfair, dancingScript } from "./fonts";
+import { glacialIndifference, dancingScript } from "./fonts";
 import "./globals.css";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${playfair.variable} ${dancingScript.variable}`}
+      className={`${glacialIndifference.variable} ${dancingScript.variable}`}
     >
       <body>
         <Header />

@@ -1,15 +1,20 @@
-import { Inter, Playfair_Display, Dancing_Script } from 'next/font/google';
+import localFont from 'next/font/local';
+import { Dancing_Script } from 'next/font/google';
 
-export const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-sans',
-});
-
-export const playfair = Playfair_Display({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-serif',
+export const glacialIndifference = localFont({
+  src: [
+    {
+      path: '../../public/fonts/GlacialIndifference-Regular.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/GlacialIndifference-Bold.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-glacial',
 });
 
 export const dancingScript = Dancing_Script({
@@ -17,3 +22,4 @@ export const dancingScript = Dancing_Script({
   display: 'swap',
   variable: '--font-script',
 });
+

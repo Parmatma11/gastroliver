@@ -6,40 +6,40 @@ import Image from 'next/image';
 import PageHero from '../../components/layout/PageHero';
 import Button from '../../components/ui/Button';
 import ScrollReveal from '../../components/ui/ScrollReveal';
-import { blogData } from '../../../data/blog';
+import { diseasesData } from '../../../data/diseases';
 import styles from './page.module.css';
 
-export default function BlogIndexPage() {
-  const [activeSeries, setActiveSeries] = useState<string>('all');
+export default function ConditionsIndexPage() {
+  const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   
   // Modal states
-  const [selectedPost, setSelectedPost] = useState<typeof blogData[0] | null>(null);
+  const [selectedDisease, setSelectedDisease] = useState<typeof diseasesData[0] | null>(null);
   const [modalContent, setModalContent] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const breadcrumbs = [
     { label: 'Home', path: '/' },
-    { label: 'Blog' }
+    { label: 'Diseases We Treat' }
   ];
 
-  const seriesNames: Record<string, string> = {
-    'all': 'All Articles',
-    'general': 'General GI Health',
-    'fatty-liver': 'Fatty Liver Series',
-    'acid-reflux': 'Acid Reflux Series',
-    'weight-loss': 'Weight Loss Program',
-  };
+  const categories = [
+    { key: 'all', label: 'All Conditions' },
+    { key: 'esophagus-stomach', label: 'Esophagus & Stomach' },
+    { key: 'intestines', label: 'Intestinal Diseases' },
+    { key: 'liver', label: 'Liver & Hepatology' },
+    { key: 'pancreas-biliary', label: 'Pancreas & Biliary' }
+  ];
 
-  // Fetch blog details for modal on card click
-  const handleCardClick = (post: typeof blogData[0]) => {
-    setSelectedPost(post);
+  // Fetch disease details for modal on card click (event-driven to avoid cascading renders inside effects)
+  const handleCardClick = (disease: typeof diseasesData[0]) => {
+    setSelectedDisease(disease);
     setLoading(true);
     setError(null);
     setModalContent('');
 
-    fetch(`/api/blog/${post.slug}/`)
+    fetch(`/api/conditions/${disease.slug}/`)
       .then(res => {
         if (!res.ok) {
           throw new Error('Failed to fetch details');
@@ -60,14 +60,14 @@ export default function BlogIndexPage() {
 
   // Handle modal closing
   const closeModal = () => {
-    setSelectedPost(null);
+    setSelectedDisease(null);
     setModalContent('');
     setError(null);
   };
 
   // Prevent background scrolling when modal is open
   useEffect(() => {
-    if (selectedPost) {
+    if (selectedDisease) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -75,7 +75,7 @@ export default function BlogIndexPage() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [selectedPost]);
+  }, [selectedDisease]);
 
   const handleBookClick = () => {
     closeModal();
@@ -84,19 +84,24 @@ export default function BlogIndexPage() {
     window.dispatchEvent(event);
   };
 
-  // Filter posts list
-  const filteredPosts = blogData.filter(post => {
-    const matchesSeries = activeSeries === 'all' || post.series === activeSeries;
-    const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          post.metaDescription.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesSeries && matchesSearch;
+  // Filter diseases list
+  const filteredDiseases = diseasesData.filter(d => {
+    const matchesCategory = activeCategory === 'all' || d.category === activeCategory;
+    const matchesSearch = d.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          d.metaDescription.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
   });
+
+  const getCategoryLabel = (key: string) => {
+    const cat = categories.find(c => c.key === key);
+    return cat ? cat.label : 'Gastroenterology';
+  };
 
   return (
     <main className={styles.container}>
       <PageHero
-        title="Medical Articles & Insights"
-        subtitle="Professional gastrointestinal health updates, diet charts, and liver care guidelines"
+        title="Diseases We Treat"
+        subtitle="Comprehensive clinical guide, diagnostics, and advanced treatment options"
         breadcrumbs={breadcrumbs}
         bannerImage="/images/clinic/hslider4.jpg"
       />
@@ -105,13 +110,13 @@ export default function BlogIndexPage() {
         {/* Filters and Search Bar Row */}
         <div className={styles.searchBarRow}>
           <div className={styles.filterBar}>
-            {Object.entries(seriesNames).map(([key, label], idx) => (
+            {categories.map((cat) => (
               <button
-                key={idx}
-                className={`${styles.filterBtn} ${activeSeries === key ? styles.active : ''}`}
-                onClick={() => setActiveSeries(key)}
+                key={cat.key}
+                className={`${styles.filterBtn} ${activeCategory === cat.key ? styles.active : ''}`}
+                onClick={() => setActiveCategory(cat.key)}
               >
-                {label} ({key === 'all' ? blogData.length : blogData.filter(b => b.series === key).length})
+                {cat.label}
               </button>
             ))}
           </div>
@@ -123,45 +128,43 @@ export default function BlogIndexPage() {
             <input
               type="text"
               className={styles.searchInput}
-              placeholder="Search articles..."
+              placeholder="Search digestive conditions..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
         </div>
 
-        {/* Blog Post Cards Grid */}
-        {filteredPosts.length > 0 ? (
+        {/* Dynamic Cards Grid */}
+        {filteredDiseases.length > 0 ? (
           <div className={styles.grid}>
-            {filteredPosts.map((post, idx) => (
-              <ScrollReveal key={post.slug} direction="up" delay={idx * 30 + 50}>
-                <article className={styles.card} onClick={() => handleCardClick(post)}>
-                  {post.featuredImage && (
+            {filteredDiseases.map((d, idx) => (
+              <ScrollReveal key={d.slug} direction="up" delay={idx * 30 + 50}>
+                <article className={styles.card} onClick={() => handleCardClick(d)}>
+                  {d.sideImage && (
                     <div className={styles.cardImageWrapper}>
                       <Image
-                        src={post.featuredImage}
-                        alt={post.title}
+                        src={d.sideImage}
+                        alt={d.title}
                         fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 300px"
                         className={styles.cardImg}
-                        loading={idx < 6 ? "eager" : "lazy"}
                       />
                       <span className={styles.cardBadge}>
-                        {post.series ? (seriesNames[post.series] || post.series) : "General"}
+                        {getCategoryLabel(d.category)}
                       </span>
                     </div>
                   )}
                   <div className={styles.cardContent}>
-                    {!post.featuredImage && (
+                    {!d.sideImage && (
                       <span className={styles.cardBadgeInline}>
-                        {post.series ? (seriesNames[post.series] || post.series) : "General"}
+                        {getCategoryLabel(d.category)}
                       </span>
                     )}
-                    <span className={styles.cardDate}>{post.publishedDate}</span>
-                    <h2 className={styles.cardTitle}>{post.title}</h2>
-                    <p className={styles.cardExcerpt}>{post.metaDescription}</p>
+                    <h2 className={styles.cardTitle}>{d.title}</h2>
+                    <p className={styles.cardExcerpt}>{d.metaDescription}</p>
                     <button className={styles.viewBtn}>
-                      <span>Read Article Preview</span>
+                      <span>Explore Details</span>
                       <svg className={styles.arrow} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                       </svg>
@@ -173,9 +176,9 @@ export default function BlogIndexPage() {
           </div>
         ) : (
           <div className={styles.noResults}>
-            <h3>No Articles Found</h3>
-            <p>We couldn&apos;t find any medical articles matching &ldquo;{searchQuery}&rdquo;. Try revising filters or search terms.</p>
-            <button onClick={() => { setSearchQuery(''); setActiveSeries('all'); }} className={styles.resetBtn}>
+            <h3>No Conditions Found</h3>
+            <p>We couldn&apos;t find any results matching &ldquo;{searchQuery}&rdquo;. Try revising filters or search terms.</p>
+            <button onClick={() => { setSearchQuery(''); setActiveCategory('all'); }} className={styles.resetBtn}>
               Reset Filters
             </button>
           </div>
@@ -183,17 +186,14 @@ export default function BlogIndexPage() {
       </section>
 
       {/* Dynamic Detail Modal (Big Card Overlay) */}
-      {selectedPost && (
+      {selectedDisease && (
         <div className={styles.modalOverlay} onClick={closeModal}>
           <div className={styles.modalCard} onClick={(e) => e.stopPropagation()}>
             {/* Modal Header */}
             <div className={styles.modalHeader}>
               <div className={styles.modalHeaderTitle}>
-                <span className={styles.modalBadge}>
-                  {selectedPost.series ? (seriesNames[selectedPost.series] || selectedPost.series) : "General"}
-                </span>
-                <span className={styles.modalDate}>{selectedPost.publishedDate}</span>
-                <h2>{selectedPost.title}</h2>
+                <span className={styles.modalBadge}>{getCategoryLabel(selectedDisease.category)}</span>
+                <h2>{selectedDisease.title}</h2>
               </div>
               <button className={styles.closeBtn} onClick={closeModal} aria-label="Close Modal">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className={styles.closeIcon}>
@@ -207,7 +207,7 @@ export default function BlogIndexPage() {
               {loading && (
                 <div className={styles.loaderWrapper}>
                   <div className={styles.spinner} />
-                  <p>Fetching article details...</p>
+                  <p>Fetching clinical details...</p>
                 </div>
               )}
 
@@ -230,7 +230,7 @@ export default function BlogIndexPage() {
               <Button variant="primary" size="md" onClick={handleBookClick}>
                 Book Consultation
               </Button>
-              <Link href={`/blog/${selectedPost.slug}/`} className={styles.fullPageLink} onClick={closeModal}>
+              <Link href={`/conditions/${selectedDisease.slug}/`} className={styles.fullPageLink} onClick={closeModal}>
                 Read Standalone Article &rarr;
               </Link>
             </div>
