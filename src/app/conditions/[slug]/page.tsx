@@ -39,6 +39,44 @@ export async function generateStaticParams() {
   }));
 }
 
+function stripTableOfContents(markdown: string): string {
+  if (!markdown) return "";
+  
+  const lines = markdown.split('\n');
+  const resultLines: string[] = [];
+  let inToc = false;
+  
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+    
+    // Detect Table of Contents header
+    if (trimmed.toLowerCase() === 'table of contents') {
+      inToc = true;
+      continue;
+    }
+    
+    if (inToc) {
+      // Skip empty lines, Toggle button lines, and list items representing links
+      if (trimmed === '' || 
+          trimmed.includes('[Toggle') || 
+          trimmed.includes('](#)') || 
+          trimmed.startsWith('- [') || 
+          trimmed.startsWith('* [') ||
+          (trimmed.startsWith('-') && trimmed.includes('](#'))) {
+        continue;
+      }
+      
+      // End of TOC block
+      inToc = false;
+    }
+    
+    resultLines.push(line);
+  }
+  
+  return resultLines.join('\n');
+}
+
 export default async function DiseasePage({ params }: PageProps) {
   const { slug } = await params;
   const disease = diseasesData.find(d => d.slug === slug);
@@ -53,7 +91,8 @@ export default async function DiseasePage({ params }: PageProps) {
 
   if (fs.existsSync(filePath)) {
     rawContent = fs.readFileSync(filePath, 'utf8');
-    contentHtml = parseMarkdownToHtml(rawContent);
+    const cleanedContent = stripTableOfContents(rawContent);
+    contentHtml = parseMarkdownToHtml(cleanedContent);
   } else {
     // Fallback if content file hasn't been written
     contentHtml = `<p>${disease.metaDescription}</p><p>(Medical details for this condition are currently being audited and will be updated shortly.)</p>`;
