@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
-import { testimonialsData } from '../../../data/testimonials';
 import PageHero from '../../components/layout/PageHero';
-import TestimonialCard from '../../components/ui/TestimonialCard';
+import TestimonialsPageContent from '../../components/sections/TestimonialsPageContent';
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
@@ -27,39 +26,7 @@ export default function TestimonialsPage() {
         compact
       />
 
-      <section className={`container ${styles.wrapper}`}>
-        {/* Rating Overview widget */}
-        <div className={styles.statsCard}>
-          <div className={styles.statItem}>
-            <span className={styles.number}>4.9</span>
-            <div className={styles.stars}>★★★★★</div>
-            <span className={styles.label}>Google Rating</span>
-          </div>
-          <div className={styles.statItem}>
-            <span className={styles.number}>9,980+</span>
-            <div className={styles.stars}>Happy Patients</div>
-            <span className={styles.label}>Treated Successfully</span>
-          </div>
-          <div className={styles.statItem}>
-            <span className={styles.number}>15+</span>
-            <div className={styles.stars}>Years Experience</div>
-            <span className={styles.label}>Of Clinical Practice</span>
-          </div>
-        </div>
-
-        {/* Testimonials grid */}
-        <div className={styles.grid}>
-          {testimonialsData.map((test, idx) => (
-            <TestimonialCard
-              key={idx}
-              name={test.name}
-              text={test.text}
-              rating={test.rating}
-              avatar={test.avatar}
-            />
-          ))}
-        </div>
-      </section>
+      <TestimonialsPageContent />
     </main>
   );
 }

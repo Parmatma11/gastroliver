@@ -5,19 +5,25 @@ import Image from 'next/image';
 import { Testimonial } from '../../../types/content';
 import styles from './TestimonialCard.module.css';
 
-export default function TestimonialCard({ name, text, rating, avatar }: Testimonial) {
+interface TestimonialCardProps extends Testimonial {
+  compact?: boolean;
+  active?: boolean;
+}
+
+export default function TestimonialCard({ name, text, rating, avatar, compact, active }: TestimonialCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const isLongText = text.length > 220;
-  const displayText = isLongText && !isExpanded ? `${text.substring(0, 220)}...` : text;
+  const limit = compact ? 140 : 220;
+  const isLongText = text.length > limit;
+  const displayText = isLongText && !isExpanded ? `${text.substring(0, limit)}...` : text;
 
   return (
-    <div className={styles.card}>
+    <div className={`${styles.card} ${compact ? styles.cardCompact : ''} ${active ? styles.cardActive : ''}`}>
       <div className={styles.rating}>
         {Array.from({ length: rating }).map((_, i) => (
           <svg
             key={i}
-            className={styles.star}
+            className={`${styles.star} ${compact ? styles.starCompact : ''}`}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"
@@ -26,7 +32,7 @@ export default function TestimonialCard({ name, text, rating, avatar }: Testimon
           </svg>
         ))}
       </div>
-      <blockquote className={styles.quote}>
+      <blockquote className={`${styles.quote} ${compact ? styles.quoteCompact : ''}`}>
         <p>&ldquo;{displayText}&rdquo;</p>
         {isLongText && (
           <button
@@ -38,19 +44,19 @@ export default function TestimonialCard({ name, text, rating, avatar }: Testimon
           </button>
         )}
       </blockquote>
-      <div className={styles.author}>
+      <div className={`${styles.author} ${compact ? styles.authorCompact : ''}`}>
         <div className={styles.avatarWrapper}>
           <Image
             src={avatar}
             alt={name}
-            width={48}
-            height={48}
+            width={compact ? 36 : 48}
+            height={compact ? 36 : 48}
             className={styles.avatar}
           />
         </div>
         <div className={styles.meta}>
-          <cite className={styles.name}>{name}</cite>
-          <span className={styles.verified}>Verified Patient</span>
+          <cite className={`${styles.name} ${compact ? styles.nameCompact : ''}`}>{name}</cite>
+          <span className={`${styles.verified} ${compact ? styles.verifiedCompact : ''}`}>Verified Patient</span>
         </div>
       </div>
     </div>

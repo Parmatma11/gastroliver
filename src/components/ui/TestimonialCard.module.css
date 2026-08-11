@@ -28,7 +28,7 @@
   line-height: 1.6;
   font-style: italic;
   flex-grow: 1;
-  margin-bottom: var(--space-md);
+  margin: 0 0 var(--space-md) 0;
 }
 
 .author {
@@ -89,3 +89,39 @@
   color: var(--secondary);
 }
 
+.cardCompact {
+  padding: var(--space-sm) !important;
+}
+
+.cardCompact .rating {
+  margin-bottom: var(--space-xs) !important;
+}
+
+.starCompact {
+  width: 0.95rem !important;
+  height: 0.95rem !important;
+}
+
+.quoteCompact {
+  font-size: 0.85rem !important;
+  line-height: 1.5 !important;
+  margin: 0 0 var(--space-xs) 0 !important;
+}
+
+.authorCompact {
+  padding-top: var(--space-xs) !important;
+  gap: var(--space-xs) !important;
+}
+
+.nameCompact {
+  font-size: 0.85rem !important;
+}
+
+.verifiedCompact {
+  font-size: 0.7rem !important;
+}
+
+.cardActive {
+  border-color: var(--secondary) !important;
+  box-shadow: 0 8px 24px rgba(27, 58, 107, 0.1) !important;
+}
