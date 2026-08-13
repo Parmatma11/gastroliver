@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 import AppointmentModal from "../components/ui/AppointmentModal";
+import MainLayoutWrapper from "../components/layout/MainLayoutWrapper";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://gastroliver.in"),
@@ -24,9 +25,9 @@ export default function RootLayout({
     >
       <body>
         <Header />
-        <main style={{ minHeight: '80vh', paddingTop: '80px' }}>
+        <MainLayoutWrapper>
           {children}
-        </main>
+        </MainLayoutWrapper>
         <Footer />
         <AppointmentModal />
       </body>

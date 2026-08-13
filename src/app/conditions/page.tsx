@@ -6,15 +6,19 @@ import Image from 'next/image';
 import PageHero from '../../components/layout/PageHero';
 import Button from '../../components/ui/Button';
 import ScrollReveal from '../../components/ui/ScrollReveal';
+import { client } from '../../lib/sanity';
+import { PortableText } from '@portabletext/react';
 import { diseasesData } from '../../../data/diseases';
 import styles from './page.module.css';
 
 export default function ConditionsIndexPage() {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [diseases, setDiseases] = useState<any[]>(diseasesData);
+  const [loadingDiseases, setLoadingDiseases] = useState<boolean>(true);
   
   // Modal states
-  const [selectedDisease, setSelectedDisease] = useState<typeof diseasesData[0] | null>(null);
+  const [selectedDisease, setSelectedDisease] = useState<any | null>(null);
   const [modalContent, setModalContent] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,7 +28,7 @@ export default function ConditionsIndexPage() {
     { label: 'Diseases We Treat' }
   ];
 
-  const categories = [
+  const defaultCategories = [
     { key: 'all', label: 'All Conditions' },
     { key: 'esophagus-stomach', label: 'Esophagus & Stomach' },
     { key: 'intestines', label: 'Intestinal Diseases' },
@@ -32,30 +36,78 @@ export default function ConditionsIndexPage() {
     { key: 'pancreas-biliary', label: 'Pancreas & Biliary' }
   ];
 
+  const [categories, setCategories] = useState<any[]>(defaultCategories);
+
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'your_project_id_here' || !process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
+      setDiseases(diseasesData);
+      setLoadingDiseases(false);
+      return;
+    }
+
+    const fetchDiseasesAndCategories = async () => {
+      try {
+        // Fetch categories dynamically
+        const categoriesQuery = `*[_type == "diseaseCategory"] | order(title asc) {
+          "key": slug.current,
+          "label": title
+        }`;
+        const dynamicCategories = await client.fetch(categoriesQuery);
+        if (dynamicCategories && dynamicCategories.length > 0) {
+          setCategories([{ key: 'all', label: 'All Conditions' }, ...dynamicCategories]);
+        }
+
+        // Fetch diseases
+        const query = `*[_type == "disease"] | order(title asc) {
+          "slug": slug.current,
+          "category": coalesce(category->slug.current, category),
+          title,
+          metaDescription,
+          "sideImage": sideImage.asset->url,
+          content,
+          seo
+        }`;
+        const data = await client.fetch(query);
+        if (data && data.length > 0) {
+          setDiseases(data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch diseases/categories from Sanity, falling back:', err);
+        setDiseases(diseasesData);
+      } finally {
+        setLoadingDiseases(false);
+      }
+    };
+
+    fetchDiseasesAndCategories();
+  }, []);
+
   // Fetch disease details for modal on card click (event-driven to avoid cascading renders inside effects)
-  const handleCardClick = (disease: typeof diseasesData[0]) => {
+  const handleCardClick = (disease: any) => {
     setSelectedDisease(disease);
-    setLoading(true);
     setError(null);
     setModalContent('');
 
-    fetch(`/api/conditions/${disease.slug}/`)
-      .then(res => {
-        if (!res.ok) {
-          throw new Error('Failed to fetch details');
-        }
-        return res.json();
-      })
-      .then(data => {
-        setModalContent(data.html);
-      })
-      .catch(err => {
-        console.error(err);
-        setError('Could not load description. Please try again or visit the full page article.');
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    if (!disease.content) {
+      setLoading(true);
+      fetch(`/api/conditions/${disease.slug}/`)
+        .then(res => {
+          if (!res.ok) {
+            throw new Error('Failed to fetch details');
+          }
+          return res.json();
+        })
+        .then(data => {
+          setModalContent(data.html);
+        })
+        .catch(err => {
+          console.error(err);
+          setError('Could not load description. Please try again or visit the full page article.');
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
   };
 
   // Handle modal closing
@@ -85,10 +137,10 @@ export default function ConditionsIndexPage() {
   };
 
   // Filter diseases list
-  const filteredDiseases = diseasesData.filter(d => {
+  const filteredDiseases = diseases.filter(d => {
     const matchesCategory = activeCategory === 'all' || d.category === activeCategory;
-    const matchesSearch = d.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          d.metaDescription.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = (d.title?.toLowerCase() || '').includes(searchQuery.toLowerCase()) ||
+                          (d.metaDescription?.toLowerCase() || '').includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
@@ -99,9 +151,9 @@ export default function ConditionsIndexPage() {
 
   const getCategoryCount = (key: string): number => {
     if (key === 'all') {
-      return diseasesData.length;
+      return diseases.length;
     }
-    return diseasesData.filter(d => d.category === key).length;
+    return diseases.filter(d => d.category === key).length;
   };
 
   return (
@@ -224,12 +276,16 @@ export default function ConditionsIndexPage() {
                 </div>
               )}
 
-              {!loading && !error && modalContent && (
+              {!loading && !error && (selectedDisease.content ? (
+                <div className={styles.modalHtml}>
+                  <PortableText value={selectedDisease.content} />
+                </div>
+              ) : modalContent ? (
                 <div 
                   className={styles.modalHtml}
                   dangerouslySetInnerHTML={{ __html: modalContent }}
                 />
-              )}
+              ) : null)}
             </div>
 
             {/* Modal Footer (CTAs) */}

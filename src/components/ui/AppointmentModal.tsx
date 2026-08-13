@@ -1,11 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import styles from './AppointmentModal.module.css';
 
 export default function AppointmentModal() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isIframeLoading, setIsIframeLoading] = useState(true);
+
+  if (pathname?.startsWith('/studio')) {
+    return null;
+  }
 
   useEffect(() => {
     // Intercept clicks on links with href="#appointment-modal"

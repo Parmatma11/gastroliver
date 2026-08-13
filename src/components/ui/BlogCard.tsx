@@ -27,13 +27,19 @@ export default function BlogCard({ slug, title, series, metaDescription, feature
     <article className={styles.card}>
       <Link href={`/blog/${slug}/`} className={styles.imageLink} aria-label={`Read ${title}`}>
         <div className={styles.imageWrapper}>
-          <Image
-            src={featuredImage}
-            alt={title}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className={styles.image}
-          />
+          {featuredImage ? (
+            <Image
+              src={featuredImage}
+              alt={title}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className={styles.image}
+            />
+          ) : (
+            <div className={styles.imagePlaceholder}>
+              <span>GastroLiver Clinic</span>
+            </div>
+          )}
         </div>
       </Link>
       

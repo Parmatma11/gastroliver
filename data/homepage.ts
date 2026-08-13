@@ -1,5 +1,13 @@
 export const heroSlides = [
   {
+    title: "Expert Digestive & Liver Care",
+    subtitle: "Advanced Clinical Diagnostics & Therapy",
+    description: "Dr. Ankita Gupta provides high-quality consultations and comprehensive treatments for all major gastrointestinal and liver conditions.",
+    backgroundImage: "/images/hero/WhatsApp Image 2026-08-12 at 9.19.18 PM.jpeg",
+    ctaText: "Explore Procedures",
+    ctaLink: "/procedures/"
+  },
+  {
     title: "Best Gastroenterologist in Delhi",
     subtitle: "Comprehensive Gastro, Liver, Pancreas & Endoscopy Care",
     description: "Consult Dr. Ankita Gupta for advanced diagnosis and medical management of gastrointestinal, liver, and biliary system disorders.",

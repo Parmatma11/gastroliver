@@ -6,15 +6,19 @@ import Image from 'next/image';
 import PageHero from '../../components/layout/PageHero';
 import Button from '../../components/ui/Button';
 import ScrollReveal from '../../components/ui/ScrollReveal';
+import { client } from '../../lib/sanity';
+import { PortableText } from '@portabletext/react';
 import { blogData } from '../../../data/blog';
 import styles from './page.module.css';
 
 export default function BlogIndexPage() {
   const [activeSeries, setActiveSeries] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [posts, setPosts] = useState<any[]>(blogData);
+  const [loadingBlogs, setLoadingBlogs] = useState<boolean>(true);
   
   // Modal states
-  const [selectedPost, setSelectedPost] = useState<typeof blogData[0] | null>(null);
+  const [selectedPost, setSelectedPost] = useState<any | null>(null);
   const [modalContent, setModalContent] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -32,14 +36,106 @@ export default function BlogIndexPage() {
     'weight-loss': 'Weight Loss Program',
   };
 
+  const [categories, setCategories] = useState<{ slug: string; title: string }[]>([
+    { slug: 'all', title: 'All Articles' },
+    { slug: 'general', title: 'General GI Health' },
+    { slug: 'fatty-liver', title: 'Fatty Liver Series' },
+    { slug: 'acid-reflux', title: 'Acid Reflux Series' },
+    { slug: 'weight-loss', title: 'Weight Loss Program' },
+  ]);
+
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'your_project_id_here' || !process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
+      setPosts(blogData);
+      setLoadingBlogs(false);
+      return;
+    }
+
+    const fetchBlogs = async () => {
+      try {
+        const query = `*[_type == "blogPost"] | order(publishedDate desc) {
+          "slug": slug.current,
+          title,
+          "series": coalesce(series->slug.current, series),
+          "seriesTitle": coalesce(series->title, series),
+          metaDescription,
+          "featuredImage": featuredImage.asset->url,
+          publishedDate,
+          readTime,
+          author,
+          seo,
+          content
+        }`;
+        const data = await client.fetch(query);
+        if (data && data.length > 0) {
+          setPosts(data);
+
+          // Dynamically fetch and merge categories from Sanity
+          try {
+            const categoriesData = await client.fetch(`*[_type == "category"] { "slug": slug.current, title }`);
+            if (categoriesData && categoriesData.length > 0) {
+              setCategories(prev => {
+                const merged = [...prev];
+                categoriesData.forEach((cat: any) => {
+                  if (cat.slug && !merged.some(m => m.slug === cat.slug)) {
+                    merged.push({ slug: cat.slug, title: cat.title });
+                  }
+                });
+                return merged;
+              });
+            }
+          } catch (catErr) {
+            console.error('Failed to fetch categories:', catErr);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch from Sanity, falling back to local data:', err);
+        setPosts(blogData);
+      } finally {
+        setLoadingBlogs(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
   // Fetch blog details for modal on card click
-  const handleCardClick = (post: typeof blogData[0]) => {
+  const handleCardClick = (post: any) => {
     setSelectedPost(post);
-    setLoading(true);
     setError(null);
     setModalContent('');
 
-    fetch(`/api/blog/${post.slug}/`)
+    if (post.content) {
+      setLoading(false);
+      return;
+    }
+
+    if (post._id || (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'your_project_id_here' && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID)) {
+      setLoading(true);
+      client.fetch(`*[_type == "blogPost" && slug.current == $slug][0].content`, { slug: post.slug })
+        .then(content => {
+          if (content) {
+            setSelectedPost((prev: any) => prev ? { ...prev, content } : null);
+          } else {
+            return fetchLocalPreview(post.slug);
+          }
+        })
+        .catch(err => {
+          console.error('Error fetching blog details from Sanity:', err);
+          return fetchLocalPreview(post.slug);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+      return;
+    }
+
+    setLoading(true);
+    fetchLocalPreview(post.slug);
+  };
+
+  const fetchLocalPreview = (slug: string) => {
+    fetch(`/api/blog/${slug}/`)
       .then(res => {
         if (!res.ok) {
           throw new Error('Failed to fetch details');
@@ -85,10 +181,10 @@ export default function BlogIndexPage() {
   };
 
   // Filter posts list
-  const filteredPosts = blogData.filter(post => {
+  const filteredPosts = posts.filter(post => {
     const matchesSeries = activeSeries === 'all' || post.series === activeSeries;
-    const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          post.metaDescription.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = (post.title?.toLowerCase() || '').includes(searchQuery.toLowerCase()) ||
+                          (post.metaDescription?.toLowerCase() || '').includes(searchQuery.toLowerCase());
     return matchesSeries && matchesSearch;
   });
 
@@ -105,13 +201,13 @@ export default function BlogIndexPage() {
         {/* Filters and Search Bar Row */}
         <div className={styles.searchBarRow}>
           <div className={styles.filterBar}>
-            {Object.entries(seriesNames).map(([key, label], idx) => (
+            {categories.map((cat, idx) => (
               <button
                 key={idx}
-                className={`${styles.filterBtn} ${activeSeries === key ? styles.active : ''}`}
-                onClick={() => setActiveSeries(key)}
+                className={`${styles.filterBtn} ${activeSeries === cat.slug ? styles.active : ''}`}
+                onClick={() => setActiveSeries(cat.slug)}
               >
-                {label} ({key === 'all' ? blogData.length : blogData.filter(b => b.series === key).length})
+                {cat.title} ({cat.slug === 'all' ? posts.length : posts.filter(b => b.series === cat.slug).length})
               </button>
             ))}
           </div>
@@ -147,14 +243,14 @@ export default function BlogIndexPage() {
                         loading={idx < 6 ? "eager" : "lazy"}
                       />
                       <span className={styles.cardBadge}>
-                        {post.series ? (seriesNames[post.series] || post.series) : "General"}
+                        {post.seriesTitle || (post.series ? (seriesNames[post.series] || post.series) : "General")}
                       </span>
                     </div>
                   )}
                   <div className={styles.cardContent}>
                     {!post.featuredImage && (
                       <span className={styles.cardBadgeInline}>
-                        {post.series ? (seriesNames[post.series] || post.series) : "General"}
+                        {post.seriesTitle || (post.series ? (seriesNames[post.series] || post.series) : "General")}
                       </span>
                     )}
                     <span className={styles.cardDate}>{post.publishedDate}</span>
@@ -190,7 +286,7 @@ export default function BlogIndexPage() {
             <div className={styles.modalHeader}>
               <div className={styles.modalHeaderTitle}>
                 <span className={styles.modalBadge}>
-                  {selectedPost.series ? (seriesNames[selectedPost.series] || selectedPost.series) : "General"}
+                  {selectedPost.seriesTitle || (selectedPost.series ? (seriesNames[selectedPost.series] || selectedPost.series) : "General")}
                 </span>
                 <span className={styles.modalDate}>{selectedPost.publishedDate}</span>
                 <h2>{selectedPost.title}</h2>
@@ -217,11 +313,17 @@ export default function BlogIndexPage() {
                 </div>
               )}
 
-              {!loading && !error && modalContent && (
-                <div 
-                  className={styles.modalHtml}
-                  dangerouslySetInnerHTML={{ __html: modalContent }}
-                />
+              {!loading && !error && (
+                selectedPost.content ? (
+                  <div className="prose">
+                    <PortableText value={selectedPost.content} />
+                  </div>
+                ) : modalContent ? (
+                  <div 
+                    className={styles.modalHtml}
+                    dangerouslySetInnerHTML={{ __html: modalContent }}
+                  />
+                ) : null
               )}
             </div>
 

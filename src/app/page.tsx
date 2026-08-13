@@ -15,6 +15,7 @@ import { Metadata } from 'next';
 import GalleryPreview from '../components/sections/GalleryPreview';
 import styles from './page.module.css';
 import ScrollReveal from '../components/ui/ScrollReveal';
+import { client } from '../lib/sanity';
 
 export const metadata: Metadata = {
   title: "Best Gastroenterologist in Delhi | Dr. Ankita Gupta | GLEC",
@@ -24,7 +25,47 @@ export const metadata: Metadata = {
   }
 };
 
-export default function Home() {
+export default async function Home() {
+  // Fetch facilities dynamically from Sanity if configured
+  let facilities = facilitiesData;
+  let latestBlogs = latestBlogPosts;
+
+  if (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'your_project_id_here' && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
+    try {
+      const sanityFacilities = await client.fetch(`*[_type == "facility"] | order(title asc)[0...6] {
+        "slug": slug.current,
+        title,
+        "icon": icon.asset->url,
+        description,
+        link
+      }`);
+      if (sanityFacilities && sanityFacilities.length > 0) {
+        facilities = sanityFacilities;
+      }
+    } catch (err) {
+      console.error('Failed to fetch homepage facilities from Sanity:', err);
+    }
+
+    try {
+      const sanityBlogs = await client.fetch(`*[_type == "blogPost"] | order(publishedDate desc)[0...3] {
+        "slug": slug.current,
+        title,
+        "series": coalesce(series->slug.current, series),
+        "seriesTitle": coalesce(series->title, series),
+        metaDescription,
+        "featuredImage": featuredImage.asset->url,
+        publishedDate,
+        readTime,
+        author
+      }`);
+      if (sanityBlogs && sanityBlogs.length > 0) {
+        latestBlogs = sanityBlogs;
+      }
+    } catch (err) {
+      console.error('Failed to fetch homepage blogs from Sanity:', err);
+    }
+  }
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Physician",
@@ -215,7 +256,7 @@ export default function Home() {
           </ScrollReveal>
 
           <div className="grid grid-3">
-            {facilitiesData.slice(0, 6).map((fac, i) => (
+            {facilities.map((fac, i) => (
               <ScrollReveal
                 key={i}
                 delay={(i % 3) * 100}
@@ -256,7 +297,7 @@ export default function Home() {
           </ScrollReveal>
 
           <div className="grid grid-3">
-            {latestBlogPosts.map((post, i) => (
+            {latestBlogs.map((post, i) => (
               <ScrollReveal
                 key={i}
                 delay={i * 150}

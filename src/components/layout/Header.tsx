@@ -3,15 +3,21 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { mainNavigation } from '../../../data/navigation';
 import { contactData } from '../../../data/contact';
 import styles from './Header.module.css';
 import Button from '../ui/Button';
 
 export default function Header() {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
+
+  if (pathname?.startsWith('/studio')) {
+    return null;
+  }
 
   useEffect(() => {
     const handleScroll = () => {

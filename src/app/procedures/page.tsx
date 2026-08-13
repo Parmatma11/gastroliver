@@ -6,6 +6,8 @@ import Image from 'next/image';
 import PageHero from '../../components/layout/PageHero';
 import Button from '../../components/ui/Button';
 import ScrollReveal from '../../components/ui/ScrollReveal';
+import { client } from '../../lib/sanity';
+import { PortableText } from '@portabletext/react';
 import { proceduresData } from '../../../data/procedures';
 import styles from './page.module.css';
 
@@ -13,8 +15,11 @@ export default function ProceduresIndexPage() {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   
+  const [procedures, setProcedures] = useState<any[]>(proceduresData);
+  const [loadingProcedures, setLoadingProcedures] = useState<boolean>(true);
+  
   // Modal states
-  const [selectedProcedure, setSelectedProcedure] = useState<typeof proceduresData[0] | null>(null);
+  const [selectedProcedure, setSelectedProcedure] = useState<any | null>(null);
   const [modalContent, setModalContent] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,12 +29,14 @@ export default function ProceduresIndexPage() {
     { label: 'Procedures & Facilities' }
   ];
 
-  const categories = [
+  const defaultCategories = [
     { key: 'all', label: 'All Procedures' },
     { key: 'endoscopy', label: 'Endoscopy & EUS' },
     { key: 'liver', label: 'Liver Diagnostics' },
     { key: 'special', label: 'Special GI Procedures' }
   ];
+
+  const [categories, setCategories] = useState<any[]>(defaultCategories);
 
   // Map slug to category key
   const getProcedureCategory = (slug: string): string => {
@@ -53,35 +60,81 @@ export default function ProceduresIndexPage() {
 
   const getCategoryCount = (key: string): number => {
     if (key === 'all') {
-      return proceduresData.length;
+      return procedures.length;
     }
-    return proceduresData.filter(p => getProcedureCategory(p.slug) === key).length;
+    return procedures.filter(p => (p.category || getProcedureCategory(p.slug)) === key).length;
   };
 
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'your_project_id_here' || !process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
+      setProcedures(proceduresData);
+      setLoadingProcedures(false);
+      return;
+    }
+
+    const fetchProceduresAndCategories = async () => {
+      try {
+        // Fetch categories dynamically
+        const categoriesQuery = `*[_type == "procedureCategory"] | order(title asc) {
+          "key": slug.current,
+          "label": title
+        }`;
+        const dynamicCategories = await client.fetch(categoriesQuery);
+        if (dynamicCategories && dynamicCategories.length > 0) {
+          setCategories([{ key: 'all', label: 'All Procedures' }, ...dynamicCategories]);
+        }
+
+        // Fetch procedures
+        const query = `*[_type == "procedure"] | order(title asc) {
+          "slug": slug.current,
+          "category": coalesce(category->slug.current, category),
+          title,
+          metaDescription,
+          "sideImage": sideImage.asset->url,
+          content,
+          seo
+        }`;
+        const data = await client.fetch(query);
+        if (data && data.length > 0) {
+          setProcedures(data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch procedures/categories from Sanity, falling back:', err);
+        setProcedures(proceduresData);
+      } finally {
+        setLoadingProcedures(false);
+      }
+    };
+
+    fetchProceduresAndCategories();
+  }, []);
+
   // Fetch procedure details on card click
-  const handleCardClick = (procedure: typeof proceduresData[0]) => {
+  const handleCardClick = (procedure: any) => {
     setSelectedProcedure(procedure);
-    setLoading(true);
     setError(null);
     setModalContent('');
 
-    fetch(`/api/procedures/${procedure.slug}/`)
-      .then(res => {
-        if (!res.ok) {
-          throw new Error('Failed to fetch details');
-        }
-        return res.json();
-      })
-      .then(data => {
-        setModalContent(data.html);
-      })
-      .catch(err => {
-        console.error(err);
-        setError('Could not load description. Please try again or visit the full page article.');
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    if (!procedure.content) {
+      setLoading(true);
+      fetch(`/api/procedures/${procedure.slug}/`)
+        .then(res => {
+          if (!res.ok) {
+            throw new Error('Failed to fetch details');
+          }
+          return res.json();
+        })
+        .then(data => {
+          setModalContent(data.html);
+        })
+        .catch(err => {
+          console.error(err);
+          setError('Could not load description. Please try again or visit the full page article.');
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
   };
 
   // Handle modal closing
@@ -111,10 +164,11 @@ export default function ProceduresIndexPage() {
   };
 
   // Filter procedures list
-  const filteredProcedures = proceduresData.filter(p => {
-    const matchesCategory = activeCategory === 'all' || getProcedureCategory(p.slug) === activeCategory;
-    const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          p.metaDescription.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredProcedures = procedures.filter(p => {
+    const categoryKey = p.category || getProcedureCategory(p.slug);
+    const matchesCategory = activeCategory === 'all' || categoryKey === activeCategory;
+    const matchesSearch = (p.title?.toLowerCase() || '').includes(searchQuery.toLowerCase()) ||
+                          (p.metaDescription?.toLowerCase() || '').includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
@@ -238,12 +292,16 @@ export default function ProceduresIndexPage() {
                 </div>
               )}
 
-              {!loading && !error && modalContent && (
+              {!loading && !error && (selectedProcedure.content ? (
+                <div className={styles.modalHtml}>
+                  <PortableText value={selectedProcedure.content} />
+                </div>
+              ) : modalContent ? (
                 <div 
                   className={styles.modalHtml}
                   dangerouslySetInnerHTML={{ __html: modalContent }}
                 />
-              )}
+              ) : null)}
             </div>
 
             {/* Modal Footer (CTAs) */}

@@ -1,12 +1,18 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { footerNavigation, socialLinks } from '../../../data/navigation';
 import { contactData } from '../../../data/contact';
 import styles from './Footer.module.css';
 
 export default function Footer() {
+  const pathname = usePathname();
   const currentYear = new Date().getFullYear();
+
+  if (pathname?.startsWith('/studio')) {
+    return null;
+  }
 
   return (
     <footer className={styles.footer}>

@@ -3,6 +3,8 @@ import path from 'path';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { client } from '../../../lib/sanity';
+import { PortableText } from '@portabletext/react';
 import { diseasesData } from '../../../../data/diseases';
 import { proceduresData } from '../../../../data/procedures';
 import { contactData } from '../../../../data/contact';
@@ -19,15 +21,36 @@ interface PageProps {
   }>;
 }
 
+interface PortableTextSection {
+  id: string;
+  title: string;
+  cleanTitle: string;
+  level: number;
+  blocks: any[];
+}
+
 // Generate metadata for each condition dynamically
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const disease = diseasesData.find(d => d.slug === slug);
+  let disease: any = null;
+
+  if (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'your_project_id_here' && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
+    try {
+      disease = await client.fetch(`*[_type == "disease" && slug.current == $slug][0] { seo, title, metaDescription }`, { slug });
+    } catch (err) {
+      console.error('Error generating dynamic SEO metadata from Sanity:', err);
+    }
+  }
+
+  if (!disease) {
+    disease = diseasesData.find(d => d.slug === slug);
+  }
+
   if (!disease) return {};
 
   return {
-    title: disease.seo.title,
-    description: disease.seo.description,
+    title: disease.seo?.title || disease.title,
+    description: disease.seo?.description || disease.metaDescription,
     alternates: {
       canonical: `/conditions/${slug}/`,
     }
@@ -36,6 +59,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 // Statically generate params for all known disease pages
 export async function generateStaticParams() {
+  if (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'your_project_id_here' && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
+    try {
+      const diseases = await client.fetch(`*[_type == "disease"] { "slug": slug.current }`);
+      if (diseases && diseases.length > 0) {
+        return diseases.map((d: any) => ({ slug: d.slug }));
+      }
+    } catch (err) {
+      console.error('Error generating static parameters from Sanity:', err);
+    }
+  }
+
   return diseasesData.map(d => ({
     slug: d.slug,
   }));
@@ -50,34 +84,108 @@ function stripTableOfContents(markdown: string): string {
   return markdown;
 }
 
+function slugify(text: string): string {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-');
+}
+
+function groupPortableTextIntoSections(blocks: any[]): PortableTextSection[] {
+  if (!blocks || !Array.isArray(blocks)) return [];
+
+  const sections: PortableTextSection[] = [];
+  
+  let currentSection: PortableTextSection = {
+    id: 'overview',
+    title: 'Overview',
+    cleanTitle: 'Overview',
+    level: 1,
+    blocks: []
+  };
+
+  for (const block of blocks) {
+    if (block._type === 'block' && block.style === 'h2') {
+      sections.push(currentSection);
+
+      const headingText = block.children?.map((c: any) => c.text).join('') || '';
+      const sectionId = slugify(headingText) || `section-${sections.length}`;
+      
+      currentSection = {
+        id: sectionId,
+        title: headingText,
+        cleanTitle: headingText,
+        level: 2,
+        blocks: []
+      };
+      continue;
+    }
+
+    currentSection.blocks.push(block);
+  }
+  
+  sections.push(currentSection);
+  return sections;
+}
+
 export default async function DiseasePage({ params }: PageProps) {
   const { slug } = await params;
-  const disease = diseasesData.find(d => d.slug === slug);
+  let disease: any = null;
+  let isSanity = false;
+
+  if (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'your_project_id_here' && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
+    try {
+      const query = `*[_type == "disease" && slug.current == $slug][0] {
+        "slug": slug.current,
+        title,
+        category,
+        metaDescription,
+        "sideImage": sideImage.asset->url,
+        content,
+        seo
+      }`;
+      disease = await client.fetch(query, { slug });
+      if (disease) {
+        isSanity = true;
+      }
+    } catch (err) {
+      console.error('Failed to fetch disease from Sanity, falling back to local files:', err);
+    }
+  }
+
+  if (!disease) {
+    disease = diseasesData.find(d => d.slug === slug);
+  }
+
   if (!disease) {
     notFound();
   }
 
-  // Load content file
-  const filePath = path.join(process.cwd(), 'content', 'diseases', `${slug}.md`);
-  let rawContent = "";
-  let sections: MarkdownSection[] = [];
+  // Load content file or Sanity blocks
+  let sections: any[] = [];
 
-  if (fs.existsSync(filePath)) {
-    rawContent = fs.readFileSync(filePath, 'utf8');
-    const cleanedContent = stripTableOfContents(rawContent);
-    sections = parseContentToSections(cleanedContent);
+  if (isSanity && disease.content) {
+    sections = groupPortableTextIntoSections(disease.content);
   } else {
-    // Fallback if content file hasn't been written
-    sections = [{
-      title: disease.title,
-      cleanTitle: "Overview",
-      id: "overview",
-      level: 1,
-      contentHtml: `<p>${disease.metaDescription}</p><p>(Medical details for this condition are currently being audited and will be updated shortly.)</p>`,
-      rawMarkdown: ""
-    }];
+    const filePath = path.join(process.cwd(), 'content', 'diseases', `${slug}.md`);
+    if (fs.existsSync(filePath)) {
+      const rawContent = fs.readFileSync(filePath, 'utf8');
+      const cleanedContent = stripTableOfContents(rawContent);
+      sections = parseContentToSections(cleanedContent);
+    } else {
+      sections = [{
+        title: disease.title,
+        cleanTitle: "Overview",
+        id: "overview",
+        level: 1,
+        contentHtml: `<p>${disease.metaDescription}</p><p>(Medical details for this condition are currently being audited and will be updated shortly.)</p>`,
+        rawMarkdown: ""
+      }];
+    }
   }
-
 
   const breadcrumbs = [
     { label: 'Home', path: '/' },
@@ -118,10 +226,16 @@ export default async function DiseasePage({ params }: PageProps) {
           {/* Main article intro content */}
           <ScrollReveal direction="up" delay={50}>
             <section id={introSection.id} className={styles.contentSection}>
-              <div 
-                className={styles.sectionBody}
-                dangerouslySetInnerHTML={{ __html: introSection.contentHtml }}
-              />
+              {introSection.contentHtml ? (
+                <div 
+                  className={styles.sectionBody}
+                  dangerouslySetInnerHTML={{ __html: introSection.contentHtml }}
+                />
+              ) : (
+                <div className={styles.sectionBody}>
+                  <PortableText value={introSection.blocks} />
+                </div>
+              )}
             </section>
           </ScrollReveal>
 
@@ -130,10 +244,16 @@ export default async function DiseasePage({ params }: PageProps) {
             <ScrollReveal key={idx} direction="up" delay={50}>
               <section id={sec.id} className={styles.contentSection}>
                 <h2 className={styles.sectionHeading}>{sec.cleanTitle}</h2>
-                <div 
-                  className={styles.sectionBody}
-                  dangerouslySetInnerHTML={{ __html: sec.contentHtml }}
-                />
+                {sec.contentHtml ? (
+                  <div 
+                    className={styles.sectionBody}
+                    dangerouslySetInnerHTML={{ __html: sec.contentHtml }}
+                  />
+                ) : (
+                  <div className={styles.sectionBody}>
+                    <PortableText value={sec.blocks} />
+                  </div>
+                )}
               </section>
             </ScrollReveal>
           ))}
@@ -212,7 +332,6 @@ export default async function DiseasePage({ params }: PageProps) {
         </aside>
       </div>
 
-
       {/* Structured Data: Breadcrumb and MedicalCondition Schema */}
       <script
         type="application/ld+json"
@@ -225,36 +344,19 @@ export default async function DiseasePage({ params }: PageProps) {
                 "@type": "ListItem",
                 "position": 1,
                 "name": "Home",
-                "item": "https://gastroliver.in/"
+                "item": "https://gastroliver.in"
               },
               {
                 "@type": "ListItem",
                 "position": 2,
                 "name": "Conditions",
-                "item": "https://gastroliver.in/sitemap/"
+                "item": "https://gastroliver.in/conditions/"
               },
               {
                 "@type": "ListItem",
                 "position": 3,
                 "name": disease.title,
                 "item": `https://gastroliver.in/conditions/${disease.slug}/`
-              }
-            ]
-          })
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "MedicalCondition",
-            "name": disease.title,
-            "description": disease.metaDescription,
-            "possibleTreatment": [
-              {
-                "@type": "MedicalTherapy",
-                "name": "Gastroenterology Consultation & Therapeutic Endoscopy"
               }
             ]
           })

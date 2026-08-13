@@ -7,7 +7,11 @@ import PageHero from '../../components/layout/PageHero';
 import ScrollReveal from '../ui/ScrollReveal';
 import styles from '../../app/gallery/page.module.css';
 
-export default function GalleryPageContent() {
+interface GalleryPageContentProps {
+  initialImages?: any[];
+}
+
+export default function GalleryPageContent({ initialImages = [] }: GalleryPageContentProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -17,15 +21,38 @@ export default function GalleryPageContent() {
     { label: 'Gallery' }
   ];
 
+  // Dynamically map Sanity flat items into galleryData format
+  let activeGalleryData = galleryData;
+  if (initialImages && initialImages.length > 0) {
+    const grouped: { [key: string]: { id: string; name: string; slug: string; images: { src: string; alt: string }[] } } = {};
+    initialImages.forEach(img => {
+      const catId = img.categoryId || 'uncategorized';
+      const catName = img.categoryName || 'Uncategorized';
+      if (!grouped[catId]) {
+        grouped[catId] = {
+          id: catId,
+          name: catName,
+          slug: catId,
+          images: []
+        };
+      }
+      grouped[catId].images.push({
+        src: img.src,
+        alt: img.title
+      });
+    });
+    activeGalleryData = Object.values(grouped);
+  }
+
   // Helper: Get all unique categories
   const categories = [
     { id: 'all', name: 'All Categories' },
-    ...galleryData.map(cat => ({ id: cat.id, name: cat.name }))
+    ...activeGalleryData.map(cat => ({ id: cat.id, name: cat.name }))
   ];
 
   // Get all unique images across all categories to calculate 'all' count
   const allUniqueImages: string[] = [];
-  galleryData.forEach(cat => {
+  activeGalleryData.forEach(cat => {
     cat.images.forEach(img => {
       if (!allUniqueImages.includes(img.src)) {
         allUniqueImages.push(img.src);
@@ -38,7 +65,7 @@ export default function GalleryPageContent() {
     if (categoryId === 'all') {
       return totalUniqueImagesCount;
     }
-    const cat = galleryData.find(c => c.id === categoryId);
+    const cat = activeGalleryData.find(c => c.id === categoryId);
     if (!cat) return 0;
     
     const uniqueInCat: string[] = [];
@@ -53,7 +80,7 @@ export default function GalleryPageContent() {
   // Get active images based on filter
   const activeImages: { src: string; alt: string; categoryName: string }[] = [];
 
-  galleryData.forEach(cat => {
+  activeGalleryData.forEach(cat => {
     if (selectedCategory === 'all' || selectedCategory === cat.id) {
       cat.images.forEach(img => {
         // Prevent duplicate images in display list
